@@ -132,7 +132,7 @@ export function Home() {
                   className="relative z-10"
                 >
                   <ImageWithFallback
-                    src="/src/imports/nasir-home.jpg"
+                    src="/images/nasir-home.jpg"
                     alt="Profile"
                     className="w-full h-auto rounded-3xl shadow-2xl"
                   />
