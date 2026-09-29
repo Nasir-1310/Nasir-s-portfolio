@@ -1,0 +1,35 @@
+import {
+  Award,
+  BookOpen,
+  BrainCircuit,
+  Cloud,
+  CodeXml,
+  Database,
+  FlaskConical,
+  LayoutTemplate,
+  Medal,
+  Server,
+  ShieldCheck,
+  Target,
+  Trophy,
+  Wrench,
+  type LucideIcon,
+} from 'lucide-react';
+
+/** Maps the icon keys used in data/portfolio.ts to Lucide components. */
+export const icons: Record<string, LucideIcon> = {
+  award: Award,
+  book: BookOpen,
+  brain: BrainCircuit,
+  cloud: Cloud,
+  code: CodeXml,
+  database: Database,
+  flask: FlaskConical,
+  layout: LayoutTemplate,
+  medal: Medal,
+  server: Server,
+  shield: ShieldCheck,
+  target: Target,
+  trophy: Trophy,
+  wrench: Wrench,
+};

@@ -1,180 +1,213 @@
-import { motion } from 'motion/react';
-import { Code, Database, Cloud, Brain, Smartphone, Globe } from 'lucide-react';
+import { Link } from 'react-router';
+import { ArrowRight, Briefcase, Download, GraduationCap, Mail, MapPin, Sparkles } from 'lucide-react';
+import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { PageHeader, SectionHeading } from '../components/SectionHeading';
+import { icons } from '../components/icons';
+import { Reveal } from '../components/effects/Reveal';
+import { SpotlightCard } from '../components/effects/SpotlightCard';
+import { education, professionalSkills, profile, skillGroups } from '../data/portfolio';
+
+const quickFacts = [
+  { icon: MapPin, label: 'Based in', value: profile.location },
+  { icon: GraduationCap, label: 'Education', value: 'B.Sc. in SE, IIT, University of Dhaka' },
+  { icon: Briefcase, label: 'Most recent', value: 'SWE Intern, Samsung R&D Institute BD' },
+  { icon: Mail, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
+];
 
 export function About() {
-  const skills = [
-    {
-      icon: Brain,
-      title: 'AI & Machine Learning',
-      description: 'TensorFlow, PyTorch, scikit-learn, NLP, Computer Vision',
-    },
-    {
-      icon: Code,
-      title: 'Frontend Development',
-      description: 'React, Next.js, TypeScript, Tailwind CSS, Motion',
-    },
-    {
-      icon: Database,
-      title: 'Backend Development',
-      description: 'Node.js, Python, FastAPI, PostgreSQL, MongoDB',
-    },
-    {
-      icon: Cloud,
-      title: 'Cloud & DevOps',
-      description: 'AWS, Docker, Kubernetes, CI/CD, Terraform',
-    },
-    {
-      icon: Smartphone,
-      title: 'Mobile Development',
-      description: 'React Native, Flutter, iOS, Android',
-    },
-    {
-      icon: Globe,
-      title: 'Web Technologies',
-      description: 'REST APIs, GraphQL, WebSockets, Microservices',
-    },
-  ];
-
-  const experiences = [
-    {
-      year: '3 MAR 2025 - 30 SEP 2025',
-      role: 'Software Engineer(Intern)',
-      company: 'Samsung R&D Institute Bangladesh',
-      description: 'Contributed to the development of innovative software solutions, collaborating with cross-functional teams to design and implement features that enhance user experience and performance.',
-    },
-    {
-      year: '2025 - Present',
-      role: 'Full Stack Developer',
-      company: 'Working as a freelancer',
-      description: 'Developed web applications and managed cloud infrastructure',
-    },
-  //   {
-  //     year: '2020 - 2022',
-  //     role: 'Software Engineer',
-  //     company: 'StartUp Ventures',
-  //     description: 'Built MVPs and prototypes for various startup projects',
-  //   },
-  //   {
-  //     year: '2019 - 2020',
-  //     role: 'Junior Developer',
-  //     company: 'CodeCraft Agency',
-  //     description: 'Contributed to client projects and learned best practices',
-  //   },
-  ];
-
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">About Me</h1>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            Passionate software engineer with expertise in AI/ML and full-stack development
-          </p>
-        </motion.div>
+    <div className="px-4 pb-12 pt-36 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <PageHeader
+          eyebrow="About me"
+          title={
+            <>
+              Engineer by training, <span className="text-gradient">builder</span> by nature
+            </>
+          }
+          description="I care about software that is fast, reliable and genuinely useful, and about helping the people around me grow."
+        />
 
-        {/* Bio Section */}
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="mb-20"
-        >
-          <div className="max-w-4xl mx-auto p-8 sm:p-12 rounded-3xl bg-accent/30 border border-border">
-            <h2 className="text-2xl font-bold mb-6">My Story</h2>
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                I'm a software engineer with a passion for building innovative solutions that make a difference. 
-                With over 1 years of experience in the industry, I've had the opportunity to work on diverse 
-                projects ranging from AI-powered applications to large-scale web platforms.
-              </p>
-              <p>
-                My journey in tech started with a fascination for how things work, which led me to pursue 
-                computer science. Since then, I've continuously expanded my skill set, staying current with 
-                the latest technologies and best practices in software development.
-              </p>
-              <p>
-                When I'm not coding, you can find me contributing to open-source projects, writing technical 
-                articles, or exploring new technologies. I believe in continuous learning and sharing knowledge 
-                with the community.
-              </p>
+        {/* Portrait + story */}
+        <div className="mt-14 grid gap-8 sm:mt-20 lg:grid-cols-[0.8fr_1.2fr]">
+          <Reveal className="space-y-6">
+            <div className="glass overflow-hidden rounded-[2rem] p-2">
+              <div className="overflow-hidden rounded-[1.6rem] bg-white">
+                <ImageWithFallback
+                  src={profile.photo}
+                  alt={`Portrait of ${profile.name}`}
+                  className="aspect-[4/5] w-full origin-top scale-[1.3] object-cover object-top"
+                />
+              </div>
             </div>
-          </div>
-        </motion.section>
 
-        {/* Skills Section */}
-        <section className="mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl font-bold mb-12 text-center"
-          >
-            Skills & Expertise
-          </motion.h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {skills.map((skill, index) => {
-              const Icon = skill.icon;
-              return (
-                <motion.div
-                  key={skill.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                  className="p-6 rounded-2xl bg-card border border-border hover:shadow-xl transition-all"
-                >
-                  <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6" />
+            <div className="glass rounded-3xl p-2">
+              {quickFacts.map(({ icon: Icon, label, value, href }) => {
+                const content = (
+                  <>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                      <Icon className="h-[18px] w-[18px]" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-xs text-muted-foreground">{label}</span>
+                      <span className="block truncate text-sm font-medium">{value}</span>
+                    </span>
+                  </>
+                );
+                const cls = 'flex items-center gap-4 rounded-2xl px-4 py-3 transition-colors hover:bg-brand-soft';
+                return href ? (
+                  <a key={label} href={href} className={cls}>
+                    {content}
+                  </a>
+                ) : (
+                  <div key={label} className={cls}>
+                    {content}
                   </div>
-                  <h3 className="font-semibold mb-2">{skill.title}</h3>
-                  <p className="text-sm text-muted-foreground">{skill.description}</p>
-                </motion.div>
+                );
+              })}
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <SpotlightCard className="glass h-full rounded-[2rem] p-8 sm:p-12">
+              <p className="eyebrow mb-4">My story</p>
+              <h2 className="text-2xl sm:text-3xl">From olympiad problems to production systems</h2>
+              <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-[17px]">
+                <p>
+                  I'm a software engineer trained at the{' '}
+                  <span className="font-medium text-foreground">Institute of Information Technology (IIT), University of Dhaka</span>.
+                  I enjoy turning complex problems into reliable, well-crafted software, from production web platforms
+                  to AI-assisted developer tools.
+                </p>
+                <p>
+                  At <span className="font-medium text-foreground">Samsung R&D Institute Bangladesh</span> I worked in the
+                  Quality Innovation Group, designing test plans, running manual and automated tests, and validating
+                  defects in an industry-grade R&D environment. That work was recognized by the Managing Director. As a
+                  freelance full-stack developer, I've shipped platforms like The Professional Accountants' Society (UK)
+                  with Next.js, AWS S3 and Vercel.
+                </p>
+                <p>
+                  Outside of code, I've taught 1,000+ students mathematics, trained 500+ peers in programming, set
+                  problems for the Bangladesh Mathematics Olympiad, and helped run the IIT Software Engineers' Community.
+                  I believe in continuous learning and sharing what I know.
+                </p>
+              </div>
+
+              <div className="mt-10 border-t border-[var(--glass-edge)] pt-8">
+                <p className="mb-4 flex items-center gap-2 text-sm font-semibold">
+                  <Sparkles className="h-4 w-4 text-brand" />
+                  Professional strengths
+                </p>
+                <ul className="flex flex-wrap gap-2">
+                  {professionalSkills.map((skill) => (
+                    <li
+                      key={skill}
+                      className="rounded-full border border-[var(--glass-edge)] bg-[var(--glass-bg)] px-3.5 py-1.5 text-sm text-muted-foreground"
+                    >
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </SpotlightCard>
+          </Reveal>
+        </div>
+
+        {/* Education */}
+        <section className="mt-20 sm:mt-32">
+          <SectionHeading
+            eyebrow="Education"
+            title={
+              <>
+                Academic <span className="text-gradient">foundation</span>
+              </>
+            }
+          />
+          <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-2">
+            {education.map((item, i) => (
+              <Reveal key={item.school} delay={i * 0.1}>
+                <SpotlightCard className="glass h-full rounded-3xl p-8">
+                  <div className="flex items-start justify-between gap-4">
+                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
+                      <GraduationCap className="h-6 w-6" />
+                    </span>
+                    <span className="font-mono text-xs text-muted-foreground">{item.period}</span>
+                  </div>
+                  <h3 className="mt-6 text-xl">{item.school}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{item.unit}</p>
+                  <p className="mt-4 text-sm font-medium">{item.degree}</p>
+                  <span className="mt-5 inline-flex rounded-full bg-emerald-500/12 px-3 py-1 text-sm font-semibold text-emerald-700 ring-1 ring-emerald-500/25 dark:text-emerald-300">
+                    {item.score}
+                  </span>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* Skills */}
+        <section className="mt-20 sm:mt-32">
+          <SectionHeading
+            eyebrow="Toolbox"
+            title={
+              <>
+                Technical <span className="text-gradient">skills</span>
+              </>
+            }
+            description="The languages, frameworks and tools I use to design, build, test and ship software."
+          />
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {skillGroups.map((group, i) => {
+              const Icon = icons[group.icon];
+              return (
+                <Reveal key={group.title} delay={(i % 4) * 0.08}>
+                  <SpotlightCard className="glass h-full rounded-3xl p-6">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-soft text-brand">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <h3 className="text-base">{group.title}</h3>
+                    </div>
+                    <ul className="mt-5 flex flex-wrap gap-1.5">
+                      {group.items.map((skill) => (
+                        <li
+                          key={skill}
+                          className="rounded-lg border border-[var(--glass-edge)] bg-[var(--glass-bg)] px-2.5 py-1 text-xs text-muted-foreground"
+                        >
+                          {skill}
+                        </li>
+                      ))}
+                    </ul>
+                  </SpotlightCard>
+                </Reveal>
               );
             })}
           </div>
         </section>
 
-        {/* Experience Timeline */}
-        <section>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl font-bold mb-12 text-center"
-          >
-            Experience
-          </motion.h2>
-
-          <div className="max-w-4xl mx-auto space-y-6">
-            {experiences.map((exp, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="relative pl-8 pb-8 border-l-2 border-border last:pb-0"
+        {/* CTA */}
+        <Reveal className="mt-24">
+          <div className="glass flex flex-col items-center justify-between gap-6 rounded-3xl p-8 text-center sm:p-10 md:flex-row md:text-left">
+            <div>
+              <h2 className="text-2xl">Want the full picture?</h2>
+              <p className="mt-2 text-muted-foreground">Download my résumé, or reach out directly.</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a
+                href={profile.resume}
+                download="Nasir_Uddin_Resume.pdf"
+                className="btn-glass inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold"
               >
-                {/* Timeline dot */}
-                <div className="absolute left-[-9px] top-0 w-4 h-4 rounded-full bg-foreground border-4 border-background" />
-                
-                <div className="p-6 rounded-2xl bg-card border border-border hover:shadow-lg transition-shadow">
-                  <div className="text-sm text-muted-foreground mb-2">{exp.year}</div>
-                  <h3 className="font-semibold text-lg mb-1">{exp.role}</h3>
-                  <div className="text-sm text-muted-foreground mb-3">{exp.company}</div>
-                  <p className="text-sm text-muted-foreground">{exp.description}</p>
-                </div>
-              </motion.div>
-            ))}
+                <Download className="h-4 w-4" />
+                Download CV
+              </a>
+              <Link to="/contact" className="btn-primary inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold">
+                Get in touch
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
           </div>
-        </section>
+        </Reveal>
       </div>
     </div>
   );

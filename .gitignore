@@ -1,11 +1,6 @@
 node_modules/
 .env
 
-
-তুমি আসলে `.gitignore` ফাইল চাচ্ছো (তুমি লিখেছো `.gigignore` 😄) — নিচে একটা **full Node.js project এর জন্য ready `.gitignore`** দিলাম 👇
-
----
-
 # Dependencies
 
 node_modules/

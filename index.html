@@ -1,10 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Portfolio - Software Engineer</title>
-    <meta name="description" content="Professional portfolio website showcasing software engineering projects and experience" />
+    <title>Nasir Uddin — Software Engineer · Full-Stack & AI/ML</title>
+    <meta
+      name="description"
+      content="Portfolio of Nasir Uddin — Software Engineer from IIT, University of Dhaka and former Samsung R&D intern, building production-grade web platforms and LLM-powered testing tools."
+    />
+    <meta name="author" content="Md. Nasir Uddin" />
+    <meta name="theme-color" content="#07070d" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Nasir Uddin — Software Engineer" />
+    <meta
+      property="og:description"
+      content="Full-stack developer and AI/ML engineer. Former Samsung R&D intern. Explore projects, experience and achievements."
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Nasir Uddin — Software Engineer" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap"
+    />
+
+    <!-- Apply the saved theme before first paint to avoid a flash -->
+    <script>
+      (function () {
+        var theme = 'dark';
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light' || saved === 'dark') theme = saved;
+        } catch (e) {}
+        var root = document.documentElement;
+        root.classList.toggle('dark', theme === 'dark');
+        root.style.colorScheme = theme;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -1,208 +1,110 @@
-import { motion } from 'motion/react';
-import { ExternalLink, Github } from 'lucide-react';
-import { ImageWithFallback } from '../components/figma/ImageWithFallback';
+import { useState } from 'react';
+import { AnimatePresence, LayoutGroup, motion } from 'motion/react';
+import { Github } from 'lucide-react';
+import { PageHeader } from '../components/SectionHeading';
+import { ProjectCard } from '../components/ProjectCard';
+import { Reveal } from '../components/effects/Reveal';
+import { profile, projects, type ProjectCategory } from '../data/portfolio';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  image: string;
-  technologies: string[];
-  githubUrl: string;
-  liveUrl?: string;
-  highlights: string[];
-}
+type Filter = 'All' | ProjectCategory;
+
+const filters: Filter[] = ['All', 'Full-Stack', 'AI & Automation', 'Desktop'];
 
 export function Projects() {
-  const projects: Project[] = [
-    {
-      id: 1,
-      title: 'The Professional Accountants\' Society',
-      description: 'Developed and deployed a production-ready UK-based full-stack web platform using Next.js and TypeScript, with optimized server-side rendering (SSR) and SEO-friendly architecture.',
-      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMHdlYnNpdGV8ZW58MHx8fHwxNzQ0NjkwNDAwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-      technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'MongoDB', 'AWS S3', 'REST API', 'Node.js', 'Vercel'],
-      githubUrl: 'https://github.com/Nasir-1310/Accountant-Society-UK',
-      liveUrl: 'https://www.accountantssociety.org/',
-      highlights: [
-        'Optimized SSR and SEO-friendly architecture',
-        'Fully responsive, mobile-first UI reducing page load time by 35%',
-        'Cloud deployment with 99.9% uptime (Vercel + AWS S3)'
-      ]
-    },
-    {
-      id: 2,
-      title: 'AutoDroid - LLM-Guided Android Testing',
-      description: 'Developed and extended Droidbot integrating Large Language Models to enhance automated GUI testing coverage for real Android apps.',
-      image: 'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxhbmRyb2lkJTIwZGV2ZWxvcG1lbnQlMjB0ZXN0aW5nfGVufDB8fHx8MTc0NDY5MDQwMHww&ixlib=rb-4.1.0&q=80&w=1080',
-      technologies: ['Python', 'Android ADB', 'uiautomator2', 'LLM', 'NetworkX', 'Android SDK'],
-      githubUrl: 'https://github.com/Nasir-1310/AutoDroidX',
-      highlights: [
-        'Integrated LLMs for intelligent automated GUI testing',
-        'Smart hybrid strategy: autonomous exploration + LLM guidance',
-        'Minimized costly LLM queries while maximizing test coverage'
-      ]
-    },
-    {
-      id: 3,
-      title: 'BCS Exam Management System',
-      description: 'Built full-stack examination platform with auto-grading, bulk question uploads, and real-time result analytics serving 1000+ students with <500ms API response time.',
-      image: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxvbmxpbmUlMjBleGFtJTIwcGxhdGZvcm18ZW58MHx8fHwxNzQ0NjkwNDAwfDA&ixlib=rb-4.1.0&q=80&w=1080',
-      technologies: ['Next.js 14', 'TypeScript', 'Tailwind CSS', 'FastAPI', 'PostgreSQL'],
-      githubUrl: 'https://github.com/Nasir-1310/Exam-System',
-      liveUrl: 'https://www.exam-systems.com/',
-      highlights: [
-        'Auto-grading system serving 1000+ students',
-        'RESTful API with role-based access control',
-        'Scalable PostgreSQL architecture with 12+ normalized tables'
-      ]
-    },
-    {
-      id: 4,
-      title: 'DroidInspect - Auto UI Inspector',
-      description: 'Built an automated Android UI testing tool that generates and executes test cases using ADB and UIAutomator, significantly reducing manual testing overhead.',
-      image: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2JpbGUlMjBhcHAlMjB0ZXN0aW5nfGVufDB8fHx8MTc0NDY5MDQwMHww&ixlib=rb-4.1.0&q=80&w=1080',
-      technologies: ['Python', 'Java', 'JavaScript', 'HTML', 'CSS', 'Android SDK', 'ADB', 'UIAutomator'],
-      githubUrl: 'https://github.com/Nasir-1310/DroidInspect',
-      highlights: [
-        'Automated test case generation and execution',
-        'Cut manual UI testing effort by 40%',
-        'Repeatable emulator-based test execution'
-      ]
-    },
-    {
-      id: 5,
-      title: 'LearnPhysics - Interactive Learning App',
-      description: 'Developed an interactive learning application in C++ using graphics to visualize core physics concepts, making learning intuitive and engaging.',
-      image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwaHlzaWNzJTIwc2ltdWxhdGlvbnxlbnwwfHx8fDE3NDQ2OTA0MDB8MA&ixlib=rb-4.1.0&q=80&w=1080',
-      technologies: ['C++', 'graphics.h', 'Physics Simulations'],
-      githubUrl: 'https://github.com/Nasir-1310/LearnPhysics',
-      highlights: [
-        'Interactive physics concept visualizations',
-        'Simulations for projectile motion, vector analysis, and mechanics',
-        'Real-time parameter manipulation for hands-on learning'
-      ]
-    }
-  ];
+  const [filter, setFilter] = useState<Filter>('All');
+  const visible = filter === 'All' ? projects : projects.filter((p) => p.category === filter);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
+    <div className="px-4 pb-12 pt-36 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <PageHeader
+          eyebrow="Portfolio"
+          title={
+            <>
+              Selected <span className="text-gradient">work</span>
+            </>
+          }
+          description="Production platforms, LLM-driven testing research and interactive learning tools, each built end to end."
+        />
+
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          transition={{ delay: 0.35, duration: 0.6 }}
+          className="mt-12 flex justify-center"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">My Projects</h1>
-          <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
-            A collection of my recent work and side projects showcasing various technologies and solutions
-          </p>
+          <LayoutGroup>
+            <div role="group" aria-label="Filter projects by category" className="glass inline-flex flex-wrap justify-center gap-1 rounded-2xl p-1.5">
+              {filters.map((f) => {
+                const count = f === 'All' ? projects.length : projects.filter((p) => p.category === f).length;
+                const active = f === filter;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setFilter(f)}
+                    className={`relative isolate rounded-xl px-4 py-2 text-sm transition-colors ${
+                      active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                    }`}
+                  >
+                    {active && (
+                      <motion.span
+                        layoutId="project-filter"
+                        transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+                        className="absolute inset-0 -z-10 rounded-xl border border-[var(--glass-edge)] bg-brand-soft"
+                      />
+                    )}
+                    {f}
+                    <span className="ml-2 font-mono text-xs text-muted-foreground">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </LayoutGroup>
         </motion.div>
 
-        {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -8 }}
-              className="group rounded-2xl bg-card border border-border overflow-hidden hover:shadow-2xl transition-all"
-            >
-              {/* Project Image */}
-              <div className="relative h-48 overflow-hidden">
-                <ImageWithFallback
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              </div>
-
-              {/* Project Content */}
-              <div className="p-6 space-y-4">
-                <h3 className="font-semibold text-lg">{project.title}</h3>
-                <p className="text-sm text-muted-foreground line-clamp-3">
-                  {project.description}
-                </p>
-
-                {/* Highlights */}
-                <ul className="space-y-1 text-xs text-muted-foreground">
-                  {project.highlights.slice(0, 3).map((highlight, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-accent mt-0.5">•</span>
-                      <span className="line-clamp-1">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2">
-                  {project.technologies.slice(0, 4).map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 text-xs rounded-full bg-accent text-accent-foreground"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.technologies.length > 4 && (
-                    <span className="px-3 py-1 text-xs rounded-full bg-accent/50 text-accent-foreground">
-                      +{project.technologies.length - 4}
-                    </span>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex gap-3 pt-2">
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl border border-border hover:bg-accent transition-colors"
-                  >
-                    <Github className="w-4 h-4" />
-                    <span className="text-sm">GitHub</span>
-                  </a>
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-foreground text-background hover:opacity-90 transition-opacity"
-                    >
-                      <ExternalLink className="w-4 h-4" />
-                      <span className="text-sm">Live</span>
-                    </a>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+        <div className="relative mt-12 grid gap-8 md:grid-cols-2">
+          <AnimatePresence mode="popLayout">
+            {visible.map((project, i) => (
+              <motion.div
+                key={project.slug}
+                layout
+                initial={{ opacity: 0, y: 30, scale: 0.97 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <ProjectCard project={project} />
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        {/* CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-20 text-center p-12 rounded-3xl bg-accent/30 border border-border"
-        >
-          <h2 className="text-2xl font-bold mb-4">Interested in working together?</h2>
-          <p className="text-muted-foreground mb-6">
-            I'm always open to discussing new projects and creative ideas.
-          </p>
-          <a
-            href="https://github.com/Nasir-1310"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background rounded-xl hover:opacity-90 transition-opacity"
-          >
-            <Github className="w-5 h-5" />
-            View All on GitHub
-          </a>
-        </motion.div>
+        <Reveal className="mt-24">
+          <div className="glass relative overflow-hidden rounded-[2rem] px-6 py-14 text-center sm:px-12">
+            <div
+              aria-hidden
+              className="absolute -right-20 -top-20 h-64 w-64 rounded-full"
+              style={{ background: 'radial-gradient(circle, var(--aurora-1), transparent 65%)' }}
+            />
+            <div className="relative">
+              <h2 className="text-2xl sm:text-3xl">There's more on GitHub</h2>
+              <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+                Browse the source for these projects and everything else I'm building.
+              </p>
+              <a
+                href={profile.socials.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mt-8 inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold"
+              >
+                <Github className="h-4 w-4" />
+                Visit my GitHub
+              </a>
+            </div>
+          </div>
+        </Reveal>
       </div>
     </div>
   );
