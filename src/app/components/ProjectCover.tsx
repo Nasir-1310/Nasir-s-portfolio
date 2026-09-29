@@ -26,7 +26,7 @@ export function ProjectCover({ project }: { project: Project }) {
             <span className="h-2 w-2 rounded-full bg-[#ff5f57]" />
             <span className="h-2 w-2 rounded-full bg-[#febc2e]" />
             <span className="h-2 w-2 rounded-full bg-[#28c840]" />
-            <span className="ml-3 truncate rounded-md bg-[var(--glass-bg)] px-2 py-0.5 font-mono text-[10px] text-muted-foreground">
+            <span className="ml-3 truncate rounded-md bg-[var(--glass-bg)] px-2 py-0.5 text-[10px] text-muted-foreground">
               {title}
             </span>
           </div>
@@ -120,16 +120,16 @@ function SimulationBody({ id, c1, c2 }: { id: string; c1: string; c2: string }) 
       <path d="M30,130 Q160,-40 290,130" fill="none" stroke={`url(#${gradientId})`} strokeWidth="2" strokeDasharray="5 6" />
       <line x1="30" y1="130" x2="57" y2="94" stroke={c1} strokeWidth="2" markerEnd={`url(#${gradientId}-arrow)`} />
       <path d="M52,130 A22,22 0 0 0 43.4,112.6" fill="none" stroke="currentColor" strokeOpacity="0.4" />
-      <text x="58" y="124" fontSize="10" fill="currentColor" fillOpacity="0.6" fontFamily="JetBrains Mono, monospace">
+      <text x="58" y="124" fontSize="10" fill="currentColor" fillOpacity="0.6" fontFamily="Inter, sans-serif">
         θ
       </text>
-      <text x="62" y="92" fontSize="10" fill="currentColor" fillOpacity="0.6" fontFamily="JetBrains Mono, monospace">
+      <text x="62" y="92" fontSize="10" fill="currentColor" fillOpacity="0.6" fontFamily="Inter, sans-serif">
         v₀
       </text>
       {trajectory.map(([x, y], i) => (
         <circle key={i} cx={x} cy={y} r={i === trajectory.length - 1 ? 7 : 4} fill={`url(#${gradientId})`} opacity={0.35 + i * 0.2} />
       ))}
-      <text x="296" y="146" textAnchor="end" fontSize="9" fill="currentColor" fillOpacity="0.45" fontFamily="JetBrains Mono, monospace">
+      <text x="296" y="146" textAnchor="end" fontSize="9" fill="currentColor" fillOpacity="0.45" fontFamily="Inter, sans-serif">
         y = x·tanθ − gx² / 2v₀²cos²θ
       </text>
     </svg>

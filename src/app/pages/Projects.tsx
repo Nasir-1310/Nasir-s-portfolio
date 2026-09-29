@@ -56,7 +56,7 @@ export function Projects() {
                       />
                     )}
                     {f}
-                    <span className="ml-2 font-mono text-xs text-muted-foreground">{count}</span>
+                    <span className="ml-2 text-xs tabular-nums text-muted-foreground">{count}</span>
                   </button>
                 );
               })}

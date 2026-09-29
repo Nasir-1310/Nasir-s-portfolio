@@ -285,7 +285,7 @@ function FocusAreas() {
                     {area.tags.map((tag) => (
                       <li
                         key={tag}
-                        className="rounded-full border border-[var(--glass-edge)] px-3 py-1 font-mono text-[11px] text-muted-foreground"
+                        className="rounded-full border border-[var(--glass-edge)] px-3 py-1 text-xs font-medium text-muted-foreground"
                       >
                         {tag}
                       </li>

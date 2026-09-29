@@ -47,7 +47,7 @@ Other assets:
 ## Design
 
 See [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). In short: frosted-glass surfaces over a slowly drifting
-aurora background, a violet → indigo → cyan brand gradient, Sora / Inter / JetBrains Mono type,
+aurora background, a violet → indigo → cyan brand gradient, Sora / Inter sans-serif type,
 dark theme by default with a light theme toggle.
 
 - Colors and glass tokens: `src/styles/theme.css`

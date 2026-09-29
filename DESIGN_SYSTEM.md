@@ -50,7 +50,8 @@ Experience badges use fixed hues: Industry (violet), Freelance (cyan), Leadershi
 | --- | --- | --- |
 | Headings (`font-display`) | Sora 600–800 | Tight tracking (−0.015 to −0.03em), balanced wrapping |
 | Body (`font-sans`) | Inter 400–600 | 16px base |
-| Labels, eyebrows, code (`font-mono`) | JetBrains Mono 400–500 | Eyebrows: 12px, uppercase, 0.18em tracking |
+| Labels, eyebrows, tags, dates | Inter 500–600 | Eyebrows: 12px, uppercase, 0.16em tracking; dates use tabular numbers |
+| Terminal mock-ups in project covers (`font-mono`) | System monospace | Decorative only |
 
 Scale: hero 48 → 72px, page titles 36 → 60px, section titles 30 → 48px, card titles 18–24px.
 

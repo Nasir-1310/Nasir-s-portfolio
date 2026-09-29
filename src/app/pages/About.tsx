@@ -131,7 +131,7 @@ export function About() {
                     <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-soft text-brand">
                       <GraduationCap className="h-6 w-6" />
                     </span>
-                    <span className="font-mono text-xs text-muted-foreground">{item.period}</span>
+                    <span className="text-xs font-medium tabular-nums text-muted-foreground">{item.period}</span>
                   </div>
                   <h3 className="mt-6 text-xl">{item.school}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">{item.unit}</p>

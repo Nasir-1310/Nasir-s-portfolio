@@ -14,7 +14,7 @@ export function TechMarquee({ items }: TechMarqueeProps) {
           <li
             key={`${tech}-${i}`}
             aria-hidden={i >= items.length}
-            className="mr-3 flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--glass-edge)] bg-[var(--glass-bg)] px-5 py-2.5 font-mono text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="mr-3 flex items-center gap-2 whitespace-nowrap rounded-full border border-[var(--glass-edge)] bg-[var(--glass-bg)] px-5 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-violet-500 to-cyan-400" />
             {tech}

@@ -55,7 +55,7 @@ export function ExperienceTimeline() {
             <SpotlightCard className="glass h-full rounded-3xl p-6">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <KindBadge kind={exp.kind} />
-                <span className="font-mono text-xs text-muted-foreground">{exp.period}</span>
+                <span className="text-xs font-medium tabular-nums text-muted-foreground">{exp.period}</span>
               </div>
               <h4 className="mt-4 font-display text-lg font-semibold tracking-tight">{exp.role}</h4>
               <p className="mt-1 text-sm font-medium text-brand">{exp.org}</p>
@@ -103,7 +103,7 @@ function ProfessionalTimeline({ items }: { items: Experience[] }) {
               transition={{ duration: 0.7, ease: easeOut }}
               className="flex items-center gap-3 md:flex-col md:items-end md:gap-2 md:pt-7 md:text-right"
             >
-              <p className="font-mono text-sm text-muted-foreground">{exp.period}</p>
+              <p className="text-sm font-medium tabular-nums text-muted-foreground">{exp.period}</p>
               <KindBadge kind={exp.kind} />
             </motion.div>
 

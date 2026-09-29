@@ -21,7 +21,7 @@ export function ProjectCard({ project, compact = false }: ProjectCardProps) {
     >
       <div className={`relative overflow-hidden border-b border-[var(--glass-edge)] ${compact ? 'h-52' : 'h-56 sm:h-60'}`}>
         <ProjectCover project={project} />
-        <span className="glass absolute left-4 top-4 rounded-full px-3 py-1 font-mono text-[11px] tracking-wide">
+        <span className="glass absolute left-4 top-4 rounded-full px-3 py-1 text-[11px] font-semibold tracking-wide">
           {project.category}
         </span>
         {project.liveUrl && (
@@ -33,7 +33,7 @@ export function ProjectCard({ project, compact = false }: ProjectCardProps) {
       </div>
 
       <div className="flex flex-1 flex-col p-6 sm:p-7">
-        <p className="mb-2 font-mono text-xs text-brand">{project.tagline}</p>
+        <p className="mb-2 text-[13px] font-semibold text-brand">{project.tagline}</p>
         <h3 className="text-xl">{project.title}</h3>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
 
