@@ -8,17 +8,18 @@ export const profile = {
   fullName: 'Md. Nasir Uddin',
   initials: 'NU',
   headline: 'Software Engineer',
-  roles: ['Full-Stack Developer', 'AI/ML Engineer', 'QA & Test Automation', 'Competitive Programmer'],
+  roles: ['Research Associate', 'Machine Learning & AI', 'Full-Stack Developer', 'QA & Test Automation'],
   summary:
-    'Software Engineer from IIT, University of Dhaka and former Samsung R&D intern. I build fast, production-grade web platforms and LLM-powered tools that make software more reliable.',
-  availability: 'Open to software engineering opportunities',
+    'Software Engineering graduate from the University of Dhaka and Research Associate at BIRDI, where I train and evaluate LLMs for Verilog code generation. Former Software QA Intern at Samsung R&D and full-stack developer.',
+  availability: 'Research Associate at BIRDI',
   location: 'Dhaka, Bangladesh',
-  email: 'nasir.iit.du@gmail.com',
-  altEmail: 'bsse1310@iit.du.ac.bd',
-  phone: '01580902180',
+  email: 'bsse1310@iit.du.ac.bd',
+  altEmail: 'nasir.iit.du@gmail.com',
+  phone: '+880 1580-902180',
   phoneHref: 'tel:+8801580902180',
   photo: '/images/nasir-home.jpg',
-  resume: '/Nasir_Uddin_Resume.pdf',
+  resume: '/Md_Nasir_Uddin_CV.pdf',
+  resumeFileName: 'Md_Nasir_Uddin_CV.pdf',
   socials: {
     github: 'https://github.com/Nasir-1310',
     linkedin: 'https://www.linkedin.com/in/nasir-uddin-953080391/',
@@ -27,13 +28,20 @@ export const profile = {
 };
 
 export const stats = [
-  { value: 3.65, decimals: 2, suffix: '', label: 'CGPA', detail: 'B.Sc. in Software Engineering' },
+  { value: 3.69, decimals: 2, suffix: '', label: 'CGPA', detail: 'B.Sc. in Software Engineering' },
   { value: 300, decimals: 0, suffix: '+', label: 'Problems solved', detail: 'Codeforces & LeetCode' },
   { value: 1000, decimals: 0, suffix: '+', label: 'Students mentored', detail: 'Mathematics & programming' },
-  { value: 5, decimals: 0, suffix: '+', label: 'Projects built', detail: 'Web, AI & automation' },
+  { value: 6378, decimals: 0, suffix: '', label: 'Verified RTL samples', detail: 'Generated for CompositeRTL' },
 ];
 
 export const focusAreas = [
+  {
+    icon: 'brain',
+    title: 'LLMs for Code Generation',
+    description:
+      'Research on LLM-guided RTL generation: building verified Verilog datasets, fine-tuning code models with QLoRA and benchmarking them with pass@k.',
+    tags: ['PyTorch', 'Hugging Face', 'QLoRA', 'Verilog'],
+  },
   {
     icon: 'code',
     title: 'Full-Stack Development',
@@ -42,22 +50,15 @@ export const focusAreas = [
     tags: ['Next.js', 'Node.js', 'FastAPI', 'PostgreSQL'],
   },
   {
-    icon: 'brain',
-    title: 'AI & LLM-Powered Tooling',
-    description:
-      'Applying LLMs and machine learning to real problems, like guiding automated Android GUI testing to reach features random exploration misses.',
-    tags: ['LLMs', 'TensorFlow', 'Scikit-learn', 'NetworkX'],
-  },
-  {
     icon: 'shield',
     title: 'Quality Engineering',
     description:
       'Industry SQA experience at Samsung R&D: test plans, manual and automated testing, defect validation and EAA-compliant test design.',
-    tags: ['Selenium', 'Postman', 'UIAutomator', 'E2E'],
+    tags: ['Selenium', 'Postman', 'E2E', 'EAA'],
   },
 ] as const;
 
-export type ExperienceKind = 'Industry' | 'Freelance' | 'Leadership' | 'Teaching';
+export type ExperienceKind = 'Research' | 'Industry' | 'Leadership' | 'Teaching';
 
 export interface Experience {
   role: string;
@@ -71,48 +72,61 @@ export interface Experience {
 
 export const experiences: Experience[] = [
   {
-    role: 'Full-Stack Developer',
-    org: 'Freelance',
-    period: '2025 — Present',
-    kind: 'Freelance',
+    role: 'Research Associate · LLM-Guided RTL Code Generation',
+    org: 'Bangladesh Industry of Research, Development and Innovation (BIRDI)',
+    period: 'May 2026 — Present',
+    kind: 'Research',
+    featured: true,
     points: [
-      'Develop and deploy full-stack web applications for clients, including a UK-based professional society platform',
-      'Manage cloud infrastructure and deployments on Vercel and AWS S3',
+      'Research LLM-guided RTL code generation across dataset preparation, model training and benchmark evaluation, focused on the functional accuracy of generated Verilog',
+      'Built CompositeRTL, a synthetic multi-behavior extension of VerilogEval: generated 6,378 composite spec–RTL–testbench triples, all functionally verified through an automated Icarus Verilog compile-and-simulate loop with LLM-driven repair',
+      'Fine-tuned Qwen2.5-Coder-7B-Instruct with QLoRA (4-bit NF4, TRL SFTTrainer, PEFT) on a single 16 GB GPU, with config-driven pipelines for training, resumable checkpointing, adapter merging and inference',
+      'Traced a post-fine-tuning accuracy regression to the training data (~43% of OpenRTLSet samples did not compile) and added a compile-validation cleaning stage plus leakage-free, problem-level train/test splits',
+      'Built VerilogEval and RTLLM v2 evaluation harnesses with unbiased pass@k; benchmarked Qwen2.5-Coder (7B/14B), DeepSeek-Coder-6.7B, Qwen3.5-9B and GPT-series models across difficulty tiers',
     ],
+    highlight: 'Co-authoring a research paper on the CompositeRTL dataset (in preparation).',
   },
   {
-    role: 'Software Engineer Intern · Quality Innovation Group',
+    role: 'Intern · Quality Innovation Group',
     org: 'Samsung R&D Institute Bangladesh',
     period: 'Mar 2025 — Sep 2025',
     kind: 'Industry',
-    featured: true,
     points: [
-      'Contributed to quality improvement and innovation initiatives, supporting idea generation and evaluation of software components in an industry-grade R&D environment',
-      'Performed SQA activities including manual and automated testing; developed test cases and test plans compliant with EAA standards',
-      'Assisted in test execution, analysis and defect validation using automation frameworks and modern QA methodologies',
+      'Performed Software Quality Assurance (manual and automated testing); developed test cases and test plans compliant with EAA standards',
+      'Executed tests, analyzed results and validated defects using industry automation frameworks and QA methodologies',
     ],
     highlight:
-      'Recognized with a gift from the Managing Director for resolving Voice of Customer (VOC) issues in Samsung Notes corruption testing.',
+      'Recognized by the Managing Director for resolving Voice of Customer (VOC) issues on Samsung Notes data-corruption testing.',
+  },
+  {
+    role: 'Short Course Instructor (Part-time)',
+    org: 'Institute of Information Technology (IIT), University of Dhaka',
+    period: 'Apr 2026 — Present',
+    kind: 'Teaching',
+    points: [
+      'Teach short professional courses on Python programming, Microsoft Office and practical AI tools to students and working professionals',
+      'Design course materials, hands-on exercises and assessments aligned with industry needs',
+    ],
   },
   {
     role: 'Academic Team Member',
-    org: 'Bangladesh Mathematics Olympiad',
+    org: 'Bangladesh Mathematical Olympiad',
     period: '2023 — 2025',
     kind: 'Leadership',
     points: [
-      'Designed and validated 15+ original problems used in official national Olympiad problem sets',
-      'Led a team of problem setters and solvers, coordinating task distribution and on-time delivery',
-      'Supported event operations for 500+ contestants across regional rounds',
+      'Designed and validated 15+ original problems for regional rounds, contributing to official national Olympiad problem sets',
+      'Led a team of problem setters and solvers, coordinating task distribution and timely delivery',
+      'Supported event logistics across multiple Olympiad rounds for 500+ contestants',
     ],
   },
   {
     role: 'Organizing Secretary',
-    org: "IIT Software Engineers' Community",
+    org: "IIT Software Engineers' Community, University of Dhaka",
     period: '2024 — 2025',
     kind: 'Leadership',
     points: [
-      'Planned and coordinated events that foster collaboration and knowledge sharing among members',
-      'Managed logistics, communications and event execution to grow community engagement',
+      'Planned and coordinated events and knowledge-sharing activities to foster collaboration among members',
+      'Managed logistics, communications and event execution to strengthen community engagement',
     ],
   },
   {
@@ -121,40 +135,19 @@ export const experiences: Experience[] = [
     period: '2024 — 2025',
     kind: 'Teaching',
     points: [
-      'Ran hands-on training on programming, Microsoft Excel and PowerPoint for 500+ students',
-      'Built structured training materials and mentored students on practical skills',
+      'Delivered hands-on training on programming, Microsoft Excel and PowerPoint to 500+ students; developed structured training materials',
     ],
   },
   {
-    role: 'Ambassador',
-    org: 'ICT Olympiad Bangladesh · Season 3',
-    period: '2024 — 2025',
-    kind: 'Leadership',
-    points: [
-      'Coordinated between organizers and participants for smooth registration and updates',
-      'Assisted event operations across all rounds',
-    ],
-  },
-  {
-    role: 'Math Instructor',
+    role: 'Mathematics Instructor',
     org: 'Big Bang Academy',
     period: '2023 — 2024',
     kind: 'Teaching',
-    points: [
-      'Taught and guided 1,000+ students in mathematics with real-time problem-solving sessions',
-      'Designed interactive teaching strategies to improve engagement and outcomes',
-    ],
-  },
-  {
-    role: 'Organizing Secretary',
-    org: 'IIT Debating Club',
-    period: '2023 — 2024',
-    kind: 'Leadership',
-    points: ['Planned and organized multiple debate sessions and public-speaking workshops'],
+    points: ['Taught 1,000+ students through interactive, real-time problem-solving sessions'],
   },
 ];
 
-export type ProjectCategory = 'Full-Stack' | 'AI & Automation' | 'Desktop';
+export type ProjectCategory = 'AI & Research' | 'Full-Stack' | 'Desktop';
 
 export type ProjectCoverSpec =
   | { kind: 'browser'; url: string }
@@ -169,8 +162,10 @@ export interface Project {
   description: string;
   highlights: string[];
   technologies: string[];
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
+  /** Shown instead of links when a project has no public code, e.g. unpublished research */
+  status?: string;
   featured?: boolean;
   /** Two hex colors for the generated cover art */
   palette: [string, string];
@@ -178,6 +173,33 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+  {
+    slug: 'compositertl',
+    title: 'CompositeRTL',
+    tagline: 'Verified dataset for LLM Verilog generation',
+    category: 'AI & Research',
+    description:
+      'A synthetic multi-behavior extension of VerilogEval, built at BIRDI to train and benchmark LLMs on generating functionally correct RTL.',
+    highlights: [
+      'Generated 6,378 composite spec–RTL–testbench triples, all functionally verified',
+      'Verified by an automated Icarus Verilog compile-and-simulate loop with LLM-driven repair',
+      'Used to fine-tune Qwen2.5-Coder-7B with QLoRA and benchmark models with unbiased pass@k',
+    ],
+    technologies: ['Python', 'Verilog', 'Icarus Verilog', 'PyTorch', 'Hugging Face', 'QLoRA', 'VerilogEval', 'RTLLM'],
+    status: 'Paper in preparation',
+    featured: true,
+    palette: ['#c026d3', '#4f46e5'],
+    cover: {
+      kind: 'terminal',
+      lines: [
+        '$ generate --spec composite --repair llm',
+        '› 6,378 spec–RTL–testbench triples',
+        '› iverilog compile + simulate',
+        '› failing samples → LLM repair',
+        '✓ 6,378 / 6,378 samples verified',
+      ],
+    },
+  },
   {
     slug: 'accountants-society',
     title: "The Professional Accountants' Society",
@@ -201,7 +223,7 @@ export const projects: Project[] = [
     slug: 'autodroid',
     title: 'AutoDroid',
     tagline: 'LLM-guided Android GUI testing',
-    category: 'AI & Automation',
+    category: 'AI & Research',
     description:
       'An extension of DroidBot that integrates Large Language Models to raise automated GUI testing coverage on real Android apps.',
     highlights: [
@@ -211,7 +233,6 @@ export const projects: Project[] = [
     ],
     technologies: ['Python', 'LLM', 'Android ADB', 'uiautomator2', 'NetworkX', 'Android SDK'],
     githubUrl: 'https://github.com/Nasir-1310/AutoDroidX',
-    featured: true,
     palette: ['#0891b2', '#7c3aed'],
     cover: {
       kind: 'terminal',
@@ -244,32 +265,6 @@ export const projects: Project[] = [
     cover: { kind: 'browser', url: 'exam-systems.com' },
   },
   {
-    slug: 'droidinspect',
-    title: 'DroidInspect',
-    tagline: 'Automated Android UI inspector',
-    category: 'AI & Automation',
-    description:
-      'An automated Android UI testing tool that generates and executes test cases using ADB and UIAutomator, greatly reducing manual testing overhead.',
-    highlights: [
-      'Automatic test case generation and execution',
-      'Cut manual UI testing effort by ~40%',
-      'Repeatable, emulator-based test execution',
-    ],
-    technologies: ['Python', 'Java', 'JavaScript', 'Android SDK', 'ADB', 'UIAutomator', 'HTML/CSS'],
-    githubUrl: 'https://github.com/Nasir-1310/DroidInspect',
-    palette: ['#059669', '#0891b2'],
-    cover: {
-      kind: 'terminal',
-      lines: [
-        '$ droidinspect run --emulator',
-        '› dumping UI hierarchy',
-        '› generating test cases',
-        '› executing on emulator',
-        '✓ test report written',
-      ],
-    },
-  },
-  {
     slug: 'learnphysics',
     title: 'LearnPhysics',
     tagline: 'Interactive physics learning app',
@@ -277,11 +272,11 @@ export const projects: Project[] = [
     description:
       'An interactive C++ graphics application that visualizes core physics concepts, making formulas intuitive and hands-on.',
     highlights: [
-      'Simulations for projectile motion, vector analysis and momentum',
-      'Real-time parameter manipulation to observe effects instantly',
+      'Simulations of projectile motion, vectors and momentum',
+      'Adjustable parameters with real-time visualization',
       'Pairs visualization with interactive controls for deeper understanding',
     ],
-    technologies: ['C++', 'graphics.h', 'Physics Simulation'],
+    technologies: ['C++', 'graphics.h'],
     githubUrl: 'https://github.com/Nasir-1310/LearnPhysics',
     palette: ['#ea580c', '#db2777'],
     cover: { kind: 'simulation' },
@@ -289,29 +284,25 @@ export const projects: Project[] = [
 ];
 
 export const skillGroups = [
-  { icon: 'layout', title: 'Frontend', items: ['React.js', 'Next.js', 'TypeScript', 'JavaScript (ES6+)', 'HTML5', 'CSS3', 'Tailwind CSS', 'Bootstrap'] },
-  { icon: 'server', title: 'Backend', items: ['Node.js', 'Express.js', 'FastAPI', 'Python', 'Java (Spring Boot)', 'PHP', 'RESTful APIs'] },
-  { icon: 'code', title: 'Languages', items: ['C', 'C++', 'Java', 'Python', 'JavaScript', 'TypeScript'] },
-  { icon: 'database', title: 'Databases', items: ['PostgreSQL', 'MongoDB', 'MySQL', 'SQLite'] },
-  { icon: 'brain', title: 'AI & Machine Learning', items: ['TensorFlow', 'Scikit-learn', 'NumPy', 'Pandas', 'Matplotlib', 'OpenAI API', 'Model Training & Evaluation'] },
-  { icon: 'flask', title: 'Testing & QA', items: ['Selenium', 'Postman', 'E2E Testing', 'Unit & Integration', 'API Testing', 'EAA Testing'] },
-  { icon: 'cloud', title: 'DevOps & Cloud', items: ['Docker', 'GitHub Actions', 'CI/CD', 'AWS', 'Vercel', 'Netlify', 'Heroku', 'Linux/WSL'] },
-  { icon: 'wrench', title: 'Tools', items: ['Git & GitHub', 'VS Code', 'Figma', 'Canva', 'CLI'] },
+  { icon: 'brain', title: 'LLM & ML', items: ['PyTorch', 'Hugging Face (Transformers, TRL, PEFT)', 'QLoRA / LoRA', 'bitsandbytes', 'Unsloth', 'TensorFlow', 'Scikit-learn', 'NumPy', 'Pandas', 'OpenAI API', 'AWS Bedrock', 'OpenRouter'] },
+  { icon: 'cpu', title: 'Hardware Design', items: ['Verilog', 'SystemVerilog', 'Icarus Verilog', 'VerilogEval', 'RTLLM', 'Testbench development'] },
+  { icon: 'code', title: 'Languages', items: ['Python', 'C', 'C++', 'Java', 'JavaScript', 'TypeScript'] },
+  { icon: 'layout', title: 'Web', items: ['React.js', 'Next.js', 'Node.js', 'Express.js', 'FastAPI', 'Spring Boot', 'Tailwind CSS', 'REST APIs'] },
+  { icon: 'database', title: 'Databases', items: ['PostgreSQL', 'MySQL', 'MongoDB', 'SQLite'] },
+  { icon: 'flask', title: 'Testing & DevOps', items: ['Selenium', 'Postman', 'Unit / Integration / E2E', 'EAA testing', 'Docker', 'GitHub Actions', 'CI/CD', 'AWS', 'Vercel', 'Linux/WSL', 'Git'] },
 ] as const;
 
 export const professionalSkills = [
-  'Leadership & Team Management',
-  'Problem Solving & Critical Thinking',
-  'Communication & Collaboration',
-  'Project Planning & Coordination',
+  'Research & Analytical Thinking',
   'Teaching & Mentorship',
-  'Research & Analytical Skills',
-  'Adaptability & Continuous Learning',
+  'Leadership',
+  'Communication',
+  'Project Planning',
 ];
 
 export const marqueeTech = [
-  'React', 'Next.js', 'TypeScript', 'Node.js', 'Python', 'FastAPI', 'PostgreSQL', 'MongoDB',
-  'TensorFlow', 'Scikit-learn', 'Docker', 'AWS', 'Tailwind CSS', 'Selenium', 'Java', 'C++', 'GitHub Actions', 'Git',
+  'PyTorch', 'Hugging Face', 'QLoRA', 'Verilog', 'Python', 'React', 'Next.js', 'TypeScript', 'Node.js', 'FastAPI',
+  'PostgreSQL', 'MongoDB', 'TensorFlow', 'Scikit-learn', 'Docker', 'AWS', 'Selenium', 'C++', 'GitHub Actions',
 ];
 
 export const achievements = [
@@ -319,13 +310,13 @@ export const achievements = [
     icon: 'award',
     title: 'Recognized by the MD, Samsung R&D Institute Bangladesh',
     description:
-      'Awarded for excellent performance on Samsung projects: resolved Voice of Customer issues in Samsung Notes corruption testing.',
+      'Recognition gift for outstanding project contributions, including resolving Voice of Customer issues on Samsung Notes data-corruption testing.',
     featured: true,
   },
   {
     icon: 'trophy',
     title: 'ICPC Asia Dhaka Regional 2022',
-    description: 'Honorable mention in the online preliminary contest.',
+    description: 'Honorable Mention, Online Preliminary Contest.',
   },
   {
     icon: 'medal',
@@ -340,7 +331,7 @@ export const achievements = [
   {
     icon: 'book',
     title: "'Shera Pathok' Award",
-    description: 'Bisso Sahitya Kendro, three consecutive years (2015–2017).',
+    description: 'Bishwa Sahitya Kendra, three consecutive years (2015–2017).',
   },
 ] as const;
 
@@ -349,8 +340,8 @@ export const education = [
     school: 'University of Dhaka',
     unit: 'Institute of Information Technology (IIT)',
     degree: 'B.Sc. in Software Engineering',
-    period: '2022 — 2026',
-    score: 'CGPA 3.65 / 4.00',
+    period: '2022 — Feb 2026',
+    score: 'CGPA 3.69 / 4.00',
   },
   {
     school: 'Netrakona Govt. College',

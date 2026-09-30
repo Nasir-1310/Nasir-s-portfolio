@@ -21,7 +21,7 @@ All text lives in one file: **`src/app/data/portfolio.ts`**.
 | Name, headline, rotating roles, summary, availability, contact details, social links | `profile` |
 | Hero numbers (CGPA, problems solved, …) | `stats` |
 | "What I do" cards | `focusAreas` |
-| Work, leadership and teaching roles | `experiences` (`kind: 'Industry' \| 'Freelance'` appear on the timeline; the rest in the grid below it) |
+| Work, leadership and teaching roles | `experiences` (`kind: 'Research' \| 'Industry'` appear on the timeline; the rest in the grid below it) |
 | Projects, including category filter, links and cover-art colors | `projects` |
 | Skills, strengths, marquee technologies | `skillGroups`, `professionalSkills`, `marqueeTech` |
 | Awards | `achievements` |
@@ -29,7 +29,7 @@ All text lives in one file: **`src/app/data/portfolio.ts`**.
 
 Other assets:
 
-- **Resume:** replace `public/Nasir_Uddin_Resume.pdf` (keep the file name, or update `profile.resume`).
+- **CV:** replace `public/Md_Nasir_Uddin_CV.pdf` (keep the file name, or update `profile.resume` and `profile.resumeFileName`).
 - **Photo:** replace `public/images/nasir-home.jpg`.
 - **Favicon:** `public/favicon.svg`.
 - **Page title and search/social description:** `index.html`.

@@ -77,7 +77,7 @@ function Hero() {
             </Link>
             <a
               href={profile.resume}
-              download="Nasir_Uddin_Resume.pdf"
+              download={profile.resumeFileName}
               className="btn-glass inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold"
             >
               <Download className="h-4 w-4" />
@@ -158,8 +158,8 @@ function HeroPortrait() {
   };
 
   const chips = [
-    { icon: Briefcase, title: 'Samsung R&D', sub: 'SWE Intern · 2025', pos: 'left-0 top-10 sm:-left-10', delay: '0s' },
-    { icon: GraduationCap, title: 'CGPA 3.65', sub: 'IIT, University of Dhaka', pos: 'right-0 top-[42%] sm:-right-10', delay: '-2s' },
+    { icon: Briefcase, title: 'BIRDI', sub: 'Research Associate', pos: 'left-0 top-10 sm:-left-10', delay: '0s' },
+    { icon: GraduationCap, title: 'CGPA 3.69', sub: 'IIT, University of Dhaka', pos: 'right-0 top-[42%] sm:-right-10', delay: '-2s' },
     { icon: Target, title: '300+ problems', sub: 'Codeforces · LeetCode', pos: 'bottom-28 left-0 sm:-left-12', delay: '-4s' },
   ];
 
@@ -264,10 +264,10 @@ function FocusAreas() {
           eyebrow="What I do"
           title={
             <>
-              Engineering that spans the <span className="text-gradient">full stack</span>
+              From LLM research to <span className="text-gradient">production software</span>
             </>
           }
-          description="From pixel-perfect interfaces to APIs, databases and AI-assisted tooling, with quality built in at every layer."
+          description="Training and evaluating code-generation models, building full-stack platforms, and testing software to industry standards."
         />
 
         <div className="mt-12 grid gap-6 sm:mt-16 md:grid-cols-3">
@@ -312,7 +312,7 @@ function Experience() {
               Where I've <span className="text-gradient">made an impact</span>
             </>
           }
-          description="Industry work at Samsung R&D, freelance engineering, and years of leadership and teaching across Bangladesh's tech and olympiad communities."
+          description="LLM research at BIRDI, software quality work at Samsung R&D, and years of leadership and teaching across Bangladesh's tech and olympiad communities."
         />
         <div className="mt-16">
           <ExperienceTimeline />
@@ -337,7 +337,7 @@ function FeaturedProjects() {
                 Projects I'm <span className="text-gradient">proud of</span>
               </>
             }
-            description="Production platforms and research-driven tools, built end to end."
+            description="LLM research and production web platforms, built end to end."
           />
           <Reveal>
             <Link

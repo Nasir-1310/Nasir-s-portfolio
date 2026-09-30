@@ -40,7 +40,7 @@ Used for the primary button, gradient text, the scroll progress bar and the time
 | `--aurora-1…4` | Background color fields |
 | `--spot-inner`, `--spot-border` | Cursor spotlight glow |
 
-Experience badges use fixed hues: Industry (violet), Freelance (cyan), Leadership (amber), Teaching (emerald).
+Experience badges use fixed hues: Research (fuchsia), Industry (violet), Leadership (amber), Teaching (emerald).
 
 ---
 

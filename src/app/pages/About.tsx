@@ -9,8 +9,8 @@ import { education, professionalSkills, profile, skillGroups } from '../data/por
 
 const quickFacts = [
   { icon: MapPin, label: 'Based in', value: profile.location },
-  { icon: GraduationCap, label: 'Education', value: 'B.Sc. in SE, IIT, University of Dhaka' },
-  { icon: Briefcase, label: 'Most recent', value: 'SWE Intern, Samsung R&D Institute BD' },
+  { icon: GraduationCap, label: 'Education', value: 'B.Sc. in SE, IIT, University of Dhaka (2026)' },
+  { icon: Briefcase, label: 'Currently', value: 'Research Associate, BIRDI' },
   { icon: Mail, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
 ];
 
@@ -71,25 +71,27 @@ export function About() {
           <Reveal delay={0.1}>
             <SpotlightCard className="glass h-full rounded-[2rem] p-8 sm:p-12">
               <p className="eyebrow mb-4">My story</p>
-              <h2 className="text-2xl sm:text-3xl">From olympiad problems to production systems</h2>
+              <h2 className="text-2xl sm:text-3xl">From olympiad problems to LLM research</h2>
               <div className="mt-6 space-y-5 text-base leading-relaxed text-muted-foreground sm:text-[17px]">
                 <p>
-                  I'm a software engineer trained at the{' '}
-                  <span className="font-medium text-foreground">Institute of Information Technology (IIT), University of Dhaka</span>.
-                  I enjoy turning complex problems into reliable, well-crafted software, from production web platforms
-                  to AI-assisted developer tools.
+                  I'm a Software Engineering graduate of the{' '}
+                  <span className="font-medium text-foreground">Institute of Information Technology (IIT), University of Dhaka</span>{' '}
+                  (CGPA 3.69). Today I'm a Research Associate at{' '}
+                  <span className="font-medium text-foreground">BIRDI</span>, working on LLM-guided RTL code generation:
+                  building verified Verilog datasets like CompositeRTL, fine-tuning code models with QLoRA, and
+                  benchmarking them on VerilogEval and RTLLM.
                 </p>
                 <p>
-                  At <span className="font-medium text-foreground">Samsung R&D Institute Bangladesh</span> I worked in the
-                  Quality Innovation Group, designing test plans, running manual and automated tests, and validating
-                  defects in an industry-grade R&D environment. That work was recognized by the Managing Director. As a
-                  freelance full-stack developer, I've shipped platforms like The Professional Accountants' Society (UK)
-                  with Next.js, AWS S3 and Vercel.
+                  Before that I was an intern in the Quality Innovation Group at{' '}
+                  <span className="font-medium text-foreground">Samsung R&D Institute Bangladesh</span>, designing test
+                  plans, running manual and automated tests and validating defects. That work was recognized by the
+                  Managing Director. I've also built production web platforms such as The Professional Accountants'
+                  Society (UK) and the BCS Exam Management System.
                 </p>
                 <p>
-                  Outside of code, I've taught 1,000+ students mathematics, trained 500+ peers in programming, set
-                  problems for the Bangladesh Mathematics Olympiad, and helped run the IIT Software Engineers' Community.
-                  I believe in continuous learning and sharing what I know.
+                  Teaching runs through everything I do. I teach short courses on Python and practical AI tools at IIT,
+                  and I've taught 1,000+ students mathematics, trained 500+ peers in programming, and set problems for
+                  the Bangladesh Mathematical Olympiad.
                 </p>
               </div>
 
@@ -156,11 +158,11 @@ export function About() {
             }
             description="The languages, frameworks and tools I use to design, build, test and ship software."
           />
-          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {skillGroups.map((group, i) => {
               const Icon = icons[group.icon];
               return (
-                <Reveal key={group.title} delay={(i % 4) * 0.08}>
+                <Reveal key={group.title} delay={(i % 3) * 0.08}>
                   <SpotlightCard className="glass h-full rounded-3xl p-6">
                     <div className="flex items-center gap-3">
                       <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-soft text-brand">
@@ -195,7 +197,7 @@ export function About() {
             <div className="flex flex-wrap justify-center gap-3">
               <a
                 href={profile.resume}
-                download="Nasir_Uddin_Resume.pdf"
+                download={profile.resumeFileName}
                 className="btn-glass inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold"
               >
                 <Download className="h-4 w-4" />

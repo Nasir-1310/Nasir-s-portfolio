@@ -1,18 +1,18 @@
 import { useRef } from 'react';
 import { motion, useScroll, useSpring } from 'motion/react';
-import { Award, Building2 } from 'lucide-react';
+import { Award, Building2, FileText } from 'lucide-react';
 import { experiences, type Experience, type ExperienceKind } from '../data/portfolio';
 import { SpotlightCard } from './effects/SpotlightCard';
 import { Reveal, easeOut } from './effects/Reveal';
 
 const kindStyles: Record<ExperienceKind, string> = {
+  Research: 'bg-fuchsia-500/12 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-500/25',
   Industry: 'bg-violet-500/12 text-violet-700 dark:text-violet-300 border-violet-500/25',
-  Freelance: 'bg-cyan-500/12 text-cyan-700 dark:text-cyan-300 border-cyan-500/25',
   Leadership: 'bg-amber-500/12 text-amber-700 dark:text-amber-300 border-amber-500/25',
   Teaching: 'bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 border-emerald-500/25',
 };
 
-const isProfessional = (exp: Experience) => exp.kind === 'Industry' || exp.kind === 'Freelance';
+const isProfessional = (exp: Experience) => exp.kind === 'Research' || exp.kind === 'Industry';
 
 function KindBadge({ kind }: { kind: ExperienceKind }) {
   return <span className={`rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${kindStyles[kind]}`}>{kind}</span>;
@@ -126,8 +126,16 @@ function ProfessionalTimeline({ items }: { items: Experience[] }) {
                 <Points points={exp.points} />
 
                 {exp.highlight && (
-                  <div className="mt-6 flex gap-3 rounded-2xl border border-amber-500/25 bg-amber-500/10 p-4 text-sm leading-relaxed">
-                    <Award className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+                  <div
+                    className={`mt-6 flex gap-3 rounded-2xl border p-4 text-sm leading-relaxed ${
+                      exp.kind === 'Research' ? 'border-fuchsia-500/25 bg-fuchsia-500/10' : 'border-amber-500/25 bg-amber-500/10'
+                    }`}
+                  >
+                    {exp.kind === 'Research' ? (
+                      <FileText className="mt-0.5 h-5 w-5 shrink-0 text-fuchsia-600 dark:text-fuchsia-400" />
+                    ) : (
+                      <Award className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+                    )}
                     <p className="text-foreground/90">{exp.highlight}</p>
                   </div>
                 )}

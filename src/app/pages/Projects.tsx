@@ -8,7 +8,7 @@ import { profile, projects, type ProjectCategory } from '../data/portfolio';
 
 type Filter = 'All' | ProjectCategory;
 
-const filters: Filter[] = ['All', 'Full-Stack', 'AI & Automation', 'Desktop'];
+const filters: Filter[] = ['All', 'AI & Research', 'Full-Stack', 'Desktop'];
 
 export function Projects() {
   const [filter, setFilter] = useState<Filter>('All');
@@ -24,7 +24,7 @@ export function Projects() {
               Selected <span className="text-gradient">work</span>
             </>
           }
-          description="Production platforms, LLM-driven testing research and interactive learning tools, each built end to end."
+          description="LLM research, production web platforms and interactive learning tools, each built end to end."
         />
 
         <motion.div

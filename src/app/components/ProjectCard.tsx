@@ -1,4 +1,4 @@
-import { ArrowUpRight, CircleCheck, Github } from 'lucide-react';
+import { ArrowUpRight, CircleCheck, FileText, Github } from 'lucide-react';
 import type { Project } from '../data/portfolio';
 import { SpotlightCard } from './effects/SpotlightCard';
 import { ProjectCover } from './ProjectCover';
@@ -63,6 +63,13 @@ export function ProjectCard({ project, compact = false }: ProjectCardProps) {
         </ul>
 
         <div className="mt-auto flex gap-3 pt-7">
+          {project.status && (
+            <span className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-dashed border-[var(--glass-edge)] px-4 py-2.5 text-sm font-medium text-muted-foreground">
+              <FileText className="h-4 w-4" />
+              {project.status}
+            </span>
+          )}
+          {project.githubUrl && (
           <a
             href={project.githubUrl}
             target="_blank"
@@ -73,6 +80,7 @@ export function ProjectCard({ project, compact = false }: ProjectCardProps) {
             <Github className="h-4 w-4" />
             Code
           </a>
+          )}
           {project.liveUrl && (
             <a
               href={project.liveUrl}

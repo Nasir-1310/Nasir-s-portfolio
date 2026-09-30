@@ -221,7 +221,7 @@ export function Contact() {
                     {profile.availability}
                   </p>
                   <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Full-stack, AI/ML and quality engineering roles, as well as freelance projects and collaborations.
+                    Happy to talk about research collaborations, engineering roles and teaching.
                   </p>
                   <div className="mt-6 flex gap-2">
                     {socialLinks.map(({ icon: Icon, href, label }) => (

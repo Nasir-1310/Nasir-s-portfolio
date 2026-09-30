@@ -25,7 +25,7 @@ export function Footer() {
               <span className="font-display text-lg font-semibold tracking-tight">{profile.name}</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Software Engineer building production-grade web platforms and AI-powered tools.
+              Research Associate and Software Engineer working on LLMs for code generation and full-stack systems.
             </p>
             <p className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
               <MapPin className="h-4 w-4 text-brand" />
