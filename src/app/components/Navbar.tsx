@@ -28,6 +28,17 @@ export function Navbar() {
   }, []);
 
   useEffect(() => setMenuOpen(false), [pathname]);
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        document.getElementById('menu-toggle')?.focus();
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [menuOpen]);
 
   // Scroll-spy: highlight "Experience" while that section crosses the middle of the viewport.
   useEffect(() => {
@@ -62,11 +73,11 @@ export function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4"
+      className="site-header fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6 sm:pt-4"
     >
       <nav
         aria-label="Primary"
-        className={`mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-3 py-2 transition-all duration-500 sm:px-4 ${
+        className={`mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-3 py-2 transition-all duration-500 sm:px-4 ${
           scrolled || menuOpen ? 'glass-strong' : 'border border-transparent'
         }`}
       >
@@ -140,6 +151,7 @@ export function Navbar() {
             className="btn-glass flex h-10 w-10 items-center justify-center rounded-xl md:hidden"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={menuOpen}
+            id="menu-toggle"
             aria-controls="mobile-menu"
           >
             {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}

@@ -10,7 +10,7 @@ interface SectionHeadingProps {
 }
 
 /** Eyebrow + title + description block used at the top of each home-page section. */
-export function SectionHeading({ eyebrow, title, description, align = 'center' }: SectionHeadingProps) {
+export function SectionHeading({ eyebrow, title, description, align = 'left' }: SectionHeadingProps) {
   return (
     <Reveal className={align === 'center' ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
       <p className="eyebrow mb-4">{eyebrow}</p>

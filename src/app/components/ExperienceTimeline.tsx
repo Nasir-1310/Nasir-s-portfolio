@@ -81,7 +81,7 @@ function ProfessionalTimeline({ items }: { items: Experience[] }) {
       <div className={`absolute bottom-2 top-2 w-px bg-[var(--glass-edge)] ${railPosition}`} />
       <motion.div
         style={{ scaleY: fill }}
-        className={`absolute bottom-2 top-2 w-px origin-top bg-gradient-to-b from-violet-500 via-indigo-500 to-cyan-400 ${railPosition}`}
+        className={`absolute bottom-2 top-2 w-px origin-top bg-brand ${railPosition}`}
       />
 
       <ol className="space-y-10">
@@ -91,8 +91,8 @@ function ProfessionalTimeline({ items }: { items: Experience[] }) {
               aria-hidden
               className={`absolute top-8 z-10 h-4 w-4 -translate-x-1/2 rounded-full border-2 border-background ${railPosition} ${
                 exp.featured
-                  ? 'bg-gradient-to-br from-violet-500 to-cyan-400 shadow-[0_0_0_6px_rgba(139,92,246,0.2)]'
-                  : 'bg-gradient-to-br from-violet-500 to-indigo-500'
+                  ? 'bg-brand shadow-[0_0_0_6px_var(--brand-soft)]'
+                  : 'bg-brand'
               }`}
             />
 
@@ -115,7 +115,7 @@ function ProfessionalTimeline({ items }: { items: Experience[] }) {
             >
               <SpotlightCard
                 className={`glass rounded-3xl p-6 sm:p-8 ${
-                  exp.featured ? 'ring-1 ring-violet-500/30 shadow-[0_24px_70px_-30px_rgba(124,58,237,0.6)]' : ''
+                  exp.featured ? 'ring-1 ring-brand/20' : ''
                 }`}
               >
                 <h3 className="text-xl sm:text-2xl">{exp.role}</h3>

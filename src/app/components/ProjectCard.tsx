@@ -17,7 +17,7 @@ export function ProjectCard({ project, compact = false }: ProjectCardProps) {
     <SpotlightCard
       whileHover={{ y: -6 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24 }}
-      className="glass group flex h-full flex-col overflow-hidden rounded-3xl"
+      className="project-card glass group flex h-full flex-col overflow-hidden rounded-3xl"
     >
       <div className={`relative overflow-hidden border-b border-[var(--glass-edge)] ${compact ? 'h-52' : 'h-56 sm:h-60'}`}>
         <ProjectCover project={project} />

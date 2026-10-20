@@ -1,108 +1,27 @@
-# Portfolio Design System
+﻿# Portfolio Design System
 
-Frosted-glass surfaces floating over a slowly drifting aurora background. Dark theme by default,
-with a matching light theme. All values live in `src/styles/theme.css` (tokens) and
-`src/styles/effects.css` (effect classes), so both themes stay in sync.
-
----
-
-## Color
-
-### Brand gradient
-
-Used for the primary button, gradient text, the scroll progress bar and the timeline rail.
-
-| Token | Light | Dark |
-| --- | --- | --- |
-| `--brand-1` | `#7c3aed` violet | `#a78bfa` |
-| `--brand-2` | `#4f46e5` indigo | `#818cf8` |
-| `--brand-3` | `#0891b2` cyan | `#22d3ee` |
-| `--brand-text` (`text-brand`) | `#6d28d9` | `#c4b5fd` |
-| `--brand-soft` (`bg-brand-soft`) | violet at 10% | violet at 12% |
-
-### Surfaces and text
-
-| Token | Light | Dark |
-| --- | --- | --- |
-| `--background` | `#f5f5fa` | `#07070d` |
-| `--foreground` | `#0c0c18` | `#ececf4` |
-| `--muted-foreground` | `#585872` | `#9a9ab4` |
-| `--border` | ink at 9% | white at 8% |
-
-### Glass
-
-| Token | Purpose |
-| --- | --- |
-| `--glass-bg` / `--glass-bg-strong` | Card fill / navbar fill |
-| `--glass-border`, `--glass-edge` | 1px outline |
-| `--glass-highlight` | Inner top highlight (`inset 0 1px 0`) |
-| `--glass-shadow` | Soft drop shadow |
-| `--aurora-1…4` | Background color fields |
-| `--spot-inner`, `--spot-border` | Cursor spotlight glow |
-
-Experience badges use fixed hues: Research (fuchsia), Industry (violet), Leadership (amber), Teaching (emerald).
-
----
+The portfolio uses a restrained editorial design for a software engineer and AI researcher. Warm neutral surfaces, deep green accents, and Inter typography keep research, experience, and projects easy to evaluate.
 
 ## Typography
 
-| Role | Font | Notes |
-| --- | --- | --- |
-| Headings (`font-display`) | Sora 600–800 | Tight tracking (−0.015 to −0.03em), balanced wrapping |
-| Body (`font-sans`) | Inter 400–600 | 16px base |
-| Labels, eyebrows, tags, dates | Inter 500–600 | Eyebrows: 12px, uppercase, 0.16em tracking; dates use tabular numbers |
-| Terminal mock-ups in project covers (`font-mono`) | System monospace | Decorative only |
+Inter is the single font family, loaded once in index.html with system fallbacks and font-display: swap. Body copy uses 14–16px, section headings 30–44px, and the responsive introduction 50–80px. Monospace is reserved for project terminal illustrations.
 
-Scale: hero 48 → 72px, page titles 36 → 60px, section titles 30 → 48px, card titles 18–24px.
+## Color and surfaces
 
----
+Tokens live in src/styles/theme.css. Light mode uses #f8f9f6 backgrounds, #182c26 text, and #226249 accents. Dark mode uses #101b17 backgrounds and pale green accents. Saved theme preferences persist across visits; new visitors begin in light mode.
 
-## Effect classes (`effects.css`)
-
-| Class | Use |
-| --- | --- |
-| `.glass` | Standard frosted card (blur 18px, saturate 160%) |
-| `.glass-strong` | More opaque; navbar, mobile menu, mock windows |
-| `.glass-solid` | Mostly opaque; small labels that sit on photos |
-| `.spotlight` | Cursor-following glow on surface and border (use via `<SpotlightCard>`) |
-| `.text-gradient` (+ `.text-gradient-animated`) | Brand gradient text |
-| `.btn-primary` / `.btn-glass` | Gradient CTA with shine sweep / glass secondary button |
-| `.eyebrow` | Section label above headings |
-| `.conic-frame` + `.conic-spin` | Rotating gradient border (hero portrait) |
-| `.bg-grid`, `.bg-noise` | Background grid and film grain |
-
----
-
-## Motion
-
-| Pattern | Where | Details |
-| --- | --- | --- |
-| Reveal on scroll | Most sections (`<Reveal>`) | Fade + 24px rise, 0.7s, ease `[0.22, 1, 0.36, 1]`, once |
-| Staggered entrance | Hero, page headers | 0.09–0.1s between items |
-| Page transition | Route change | Fade + 16px rise, 0.5s |
-| Rotating role | Hero (`<RotatingText>`) | Slide up every 2.6s; slot sized to the widest word |
-| Count-up | Stats (`<CountUp>`) | 1.8s when scrolled into view |
-| Timeline fill | Experience | Gradient rail scales with scroll progress |
-| Tilt | Hero portrait | ±7° following the mouse (mouse only) |
-| Ambient loops | Aurora, chips, marquee | CSS keyframes, transform-only |
-
-All motion respects `prefers-reduced-motion`: Motion via `<MotionConfig reducedMotion="user">`,
-CSS loops via a media query in `effects.css`.
-
----
+The existing glass class names remain compatible with existing components, but render as quiet opaque surfaces with fine borders. The global aurora background and expensive full-page effects have been removed. Colored badges distinguish research, industry, leadership, and teaching. Project cover palettes remain driven by existing portfolio data.
 
 ## Layout
 
-- Container: `max-w-7xl` with `px-4 sm:px-6 lg:px-8` gutters.
-- Section rhythm: `py-16` on phones, `py-24` from `sm` up.
-- Radii: cards `rounded-3xl` (24px), feature panels `rounded-[2rem]`, buttons `rounded-xl`, pills `rounded-full`.
-- Fixed floating navbar; page content starts at `pt-32`/`pt-36`.
+The introduction pairs the owner's identity and research background with a portrait and education note. Statistics lead into a two-column selected-project collection, followed by focus areas, technologies, experience, recognition, and contact. Existing standalone pages and admin routes are retained.
 
----
+Shared refinements and responsive rules live in src/styles/refinement.css. The main content width is approximately 1216px, with 24px gutters on phones. The hero becomes one column below 768px. Project cards collapse to one column on small screens.
 
-## Accessibility
+## Interaction and accessibility
 
-- Visible `:focus-visible` ring (2px, `--ring`) on all interactive elements.
-- Icon-only buttons and links carry `aria-label`; the nav marks the current item with `aria-current`.
-- Project filters are toggle buttons (`aria-pressed`); the mobile menu uses `aria-expanded` / `aria-controls`.
-- The rotating role exposes all roles to screen readers as static text.
+Primary actions use solid green, secondary actions use bordered surfaces. Every control retains a visible keyboard focus outline. A skip link targets the main content, mobile navigation exposes its expanded state and closes with Escape, forms retain associated labels and native validation, and external links retain their accessible names. CSS and Motion respect reduced-motion preferences.
+
+## Data and behavior
+
+src/app/data/portfolio.ts remains the source of public content. Existing project filtering, social links, CV download, mailto contact flow, theme persistence, routes, and admin behavior are preserved. The admin implementation is an existing separate interface; this visual refresh adds no new persistence or backend services.

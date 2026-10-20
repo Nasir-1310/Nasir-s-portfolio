@@ -8,7 +8,7 @@ import { SpotlightCard } from '../components/effects/SpotlightCard';
 import { profile } from '../data/portfolio';
 
 const inputClass =
-  'w-full rounded-xl border border-[var(--glass-edge)] bg-[var(--glass-bg)] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 outline-none transition focus-visible:outline-none focus:border-violet-500/60 focus:ring-4 focus:ring-violet-500/15';
+  'w-full rounded-xl border border-[var(--glass-edge)] bg-[var(--glass-bg)] px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/70 outline-none transition focus-visible:outline-none focus:border-brand focus:ring-4 focus:ring-brand-soft';
 
 const contactMethods = [
   { icon: Mail, label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
