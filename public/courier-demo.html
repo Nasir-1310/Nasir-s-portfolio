@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live System Simulator: Courier and Parcel Delivery (SOA)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+:root{
+  --navy:#14213D;--navy2:#1B2A4A;--navy3:#24365C;--cream:#F5F3EE;--muted:#9AA3B5;--line:#33466B;
+  --orange:#F29A5E;--orange-d:#B84E1C;--teal:#4FB3BF;--teal-d:#1F6F78;--purple:#B79AE0;--red:#F0716A;
+  --task:#DCE8F5;--entity:#E1EFDF;--util:#F8EDD2;--client:#E9E9E9;--event:#ECE3F3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--navy);color:var(--cream);font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.45}
+button{font-family:inherit}
+.wrap{max-width:1500px;margin:0 auto;padding:20px 22px 28px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+.kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);font-weight:600}
+h1{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;line-height:1.15;margin-top:4px}
+.sub{color:var(--muted);font-size:14px;margin-top:4px;max-width:760px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{background:var(--navy2);border:1px solid var(--line);border-radius:10px;padding:6px 12px;min-width:92px}
+.stat b{display:block;font-family:'Space Grotesk',sans-serif;font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:16px}
+@media (max-width:1100px){.grid{grid-template-columns:1fr}}
+.card{background:var(--navy2);border:1px solid var(--line);border-radius:14px}
+.canvas{padding:10px}
+svg{display:block;width:100%;height:auto}
+.node rect{transition:stroke .2s, filter .2s}
+.node{cursor:pointer}
+.node text{pointer-events:none}
+.node.active rect.box{stroke:var(--orange);stroke-width:3.5;filter:url(#glow)}
+.node.err rect.box{stroke:var(--red);stroke-width:3.5;filter:url(#glowr)}
+.node.down rect.box{fill:#5A6273 !important;stroke:var(--red);stroke-dasharray:6 4}
+.node.down text{fill:#D5DAE4 !important}
+.node.sel rect.box{stroke:var(--teal);stroke-width:3}
+.legend{display:flex;flex-wrap:wrap;gap:14px;padding:8px 12px 4px;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-2px}
+.side{display:flex;flex-direction:column;gap:12px}
+.panel{padding:14px}
+.panel h2{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.panel h2 small{font-family:Inter;font-weight:400;color:var(--muted);font-size:12px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{background:var(--navy3);color:var(--cream);border:1px solid var(--line);border-radius:10px;padding:9px 10px;text-align:left;cursor:pointer;font-size:13px;line-height:1.3}
+.btn b{display:block;font-size:11px;color:var(--orange);letter-spacing:.06em}
+.btn:hover:not(:disabled){border-color:var(--orange)}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.btn.primary{grid-column:1/-1;background:var(--orange);color:var(--navy);border-color:var(--orange);font-weight:600;text-align:center;font-size:14px}
+.btn.primary b{color:var(--navy)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.toggles{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin-top:10px}
+.tg{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:#D5DAE4;cursor:pointer;line-height:1.3}
+.tg input{margin-top:2px;accent-color:var(--orange)}
+.ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.ctl input[type=range]{accent-color:var(--orange);width:110px}
+.mini{background:transparent;border:1px solid var(--line);color:var(--cream);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12.5px}
+.mini:hover:not(:disabled){border-color:var(--orange)}
+.mini.on{background:var(--teal-d);border-color:var(--teal)}
+.mini:disabled{opacity:.4;cursor:not-allowed}
+#next{background:var(--teal);color:var(--navy);border-color:var(--teal);font-weight:600}
+.track{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:11px;padding:4px 8px;border-radius:999px;background:var(--navy3);color:var(--muted);border:1px solid var(--line)}
+.chip.done{background:var(--teal-d);color:var(--cream);border-color:var(--teal-d)}
+.chip.now{background:var(--orange);color:var(--navy);border-color:var(--orange);font-weight:600}
+.status{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px}
+.badge{font-family:'Space Grotesk';font-weight:700;font-size:14px;padding:3px 10px;border-radius:8px;background:var(--navy3)}
+.badge.bad{background:#5B2A2A;color:#FFC9C4}
+.badge.good{background:var(--teal-d)}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--muted)}
+.log{max-height:360px;overflow:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+.li{border-left:3px solid var(--teal);background:var(--navy3);border-radius:6px;padding:7px 9px;font-size:12.5px;line-height:1.4}
+.li.event{border-color:var(--purple)}
+.li.ret{border-color:#7A869E}
+.li.err{border-color:var(--red)}
+.li.note{border-color:var(--orange)}
+.li .op{font-weight:600;color:var(--cream)}
+.li .ex{color:#C9CFDB;display:block;margin-top:2px}
+.li .pr{display:inline-block;margin-top:4px;font-size:10.5px;padding:1px 7px;border-radius:999px;background:#2E2A4A;color:var(--purple);border:1px solid #4A3F72}
+.li .n{color:var(--muted);font-size:11px;margin-right:4px}
+.info{font-size:13px;color:#D5DAE4}
+.info .t{font-family:'Space Grotesk';font-size:16px;font-weight:700;color:var(--cream)}
+.info .ty{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--orange);margin:2px 0 6px}
+.info p{margin-bottom:6px}
+.info .ops{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--muted)}
+.caption{position:relative;margin-top:8px;padding:10px 12px;background:var(--navy3);border-radius:10px;font-size:13.5px;min-height:44px;color:#E6E9F0;border:1px solid var(--line)}
+.caption b{color:var(--orange)}
+.empty{color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <div class="kicker">Group 2 · SOA Design · Live simulation</div>
+    <h1>Courier and Parcel Delivery: see the services at work</h1>
+    <div class="sub">Pick a scenario. Watch each call move between services, events fan out to subscribers, and the parcel's status change. Turn on a failure to see how the design handles it. Click any box to learn what that service does.</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><b id="sCalls">0</b><span>Service calls</span></div>
+    <div class="stat"><b id="sEvents">0</b><span>Events</span></div>
+    <div class="stat"><b id="sMsgs">0</b><span>SMS / email</span></div>
+    <div class="stat"><b id="sDup">0</b><span>Duplicates blocked</span></div>
+    <div class="stat"><b id="sRetry">0</b><span>Retries</span></div>
+  </div>
+</header>
+
+<div class="grid">
+  <div class="card canvas">
+    <svg id="svg" viewBox="0 0 1000 630" role="img" aria-label="Service architecture with animated calls and events">
+      <defs>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glowr" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <g id="layerLabels"></g>
+      <g id="wires"></g>
+      <g id="nodes"></g>
+      <g id="fx"></g>
+    </svg>
+    <div class="legend">
+      <span><i style="background:var(--teal)"></i>Call (request)</span>
+      <span><i style="background:#9AA3B5"></i>Reply</span>
+      <span><i style="background:var(--purple)"></i>Event</span>
+      <span><i style="background:var(--red)"></i>Failure</span>
+      <span>Layers: <b style="color:#B9CDE4">Task</b> · <b style="color:#BFD9BB">Entity</b> · <b style="color:#E6D3A6">Utility</b> · dashed = external</span>
+    </div>
+    <div class="caption" id="caption">Press <b>Run full journey</b> to watch one parcel go from booking to merchant payout.</div>
+  </div>
+
+  <div class="side">
+    <div class="card panel">
+      <h2>Scenarios <small id="hint">Start with P1</small></h2>
+      <div class="btns">
+        <button class="btn primary" id="bAll"><b>AUTO</b>Run full journey (P1 → P5)</button>
+        <button class="btn" id="bP1"><b>P1</b>Quote and book</button>
+        <button class="btn" id="bP2"><b>P2</b>Pickup scan</button>
+        <button class="btn" id="bP3"><b>P3</b>Hub handling</button>
+        <button class="btn" id="bP4"><b>P4</b>Deliver at the door</button>
+        <button class="btn" id="bP6"><b>P6</b>Failed delivery</button>
+        <button class="btn" id="bP5"><b>P5</b>Settle COD and pay merchant</button>
+        <button class="btn" id="bTrack"><b>PUBLIC</b>Track the parcel</button>
+        <button class="btn" id="bReset"><b>RESET</b>New parcel, clear log</button>
+      </div>
+      <div class="toggles">
+        <label class="tg"><input type="checkbox" id="tNotif">Notification service down</label>
+        <label class="tg"><input type="checkbox" id="tDup">Rider app resends a scan</label>
+        <label class="tg"><input type="checkbox" id="tGw">Payment gateway timeout</label>
+        <label class="tg"><input type="checkbox" id="tCharge">Billing fails during booking</label>
+      </div>
+      <div class="ctl">
+        Speed <input type="range" id="speed" min="0.4" max="2.5" step="0.1" value="1">
+        <button class="mini" id="bStep" title="Pause before every step">Step mode: off</button>
+        <button class="mini" id="next" disabled>Next ▶</button>
+      </div>
+    </div>
+
+    <div class="card panel">
+      <h2>Parcel <small class="mono" id="pid">no parcel yet</small></h2>
+      <div class="status"><span>Current status</span><span class="badge" id="badge">NONE</span></div>
+      <div class="track" id="track"></div>
+      <div class="status" style="margin-top:8px"><span class="mono" id="pmeta">COD Tk 1,200 · attempts 0 of 3</span></div>
+    </div>
+
+    <div class="card panel">
+      <h2>What just happened <small>newest first</small></h2>
+      <div class="log" id="log"><div class="empty">Steps will appear here with a plain explanation and the SOA principle behind them.</div></div>
+    </div>
+
+    <div class="card panel">
+      <h2>Service info <small>click a box</small></h2>
+      <div class="info" id="info"><span class="empty">Click any service in the diagram to see its purpose and operations.</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(() => {
+const NS = "http://www.w3.org/2000/svg";
+const L = { client:{y:32,h:46,label:"CLIENT APPS · start compositions"}, task:{y:150,h:52,label:"TASK SERVICES · control one process"}, entity:{y:278,h:52,label:"ENTITY SERVICES · own business data"}, util:{y:458,h:52,label:"UTILITY SERVICES · shared helpers"}, ext:{y:566,h:46,label:"EXTERNAL SYSTEMS"} };
+const fill = {client:"#E9E9E9",task:"#DCE8F5",entity:"#E1EFDF",util:"#F8EDD2",ext:"transparent",event:"#ECE3F3"};
+const N = {};
+function add(id,layer,x,w,label,y,info){ const l=L[layer]; N[id]={id,layer,x,y:(y??l.y),w,h:l.h,label,info}; }
+// clients
+[["sender","Sender portal"],["clerk","Branch clerk app"],["rider","Rider app"],["hub","Hub operator app"],["staff","Staff consoles"],["public","Public tracking page"]]
+ .forEach(([id,lab],i)=>add(id,"client",20+i*157,145,lab,null,{type:"Client app (composition initiator)",p:"An app that people use. It starts a composition by calling a task or entity service."}));
+add("book","task",20,260,"Book Shipment",null,{type:"Task service · P1",p:"Gives a sender a priced, confirmed booking with tracking ID, label and receipt in one request. Owns no data.",ops:"GetQuote · BookShipment · CancelBooking"});
+add("complete","task",300,260,"Complete Delivery",null,{type:"Task service · P4",p:"Records what happened at the door in one call: attempt, proof, COD and status.",ops:"RecordDelivery · RecordFailedAttempt"});
+add("handle","task",580,260,"Handle Exception",null,{type:"Task service · P6 (sub-controller)",p:"Applies the rules for reattempt, return and claims. Reads the rules from policy data, keeps no state.",ops:"ReportException · ScheduleReattempt · InitiateReturn · ReportLossOrDamage"});
+const ex=[20,230,440,650];
+[["customer","Customer Account","One record of each sender and merchant: contact details and billing terms.","CreateAccount · GetAccount · UpdateContactDetails · GetBillingTerms"],
+ ["shipment","Shipment","The record of what was booked, with the globally unique tracking ID.","CreateShipment · GetShipment · UpdateRecipient · CancelShipment · GenerateLabel · ListShipments"],
+ ["pricing","Coverage & Pricing","Where we deliver and what we charge, from versioned rules and policies.","CheckCoverage · CalculateQuote · GetServiceLevels · GetServicePolicy · UpdateRateCard"],
+ ["dispatch","Dispatch & Routing","Who moves each parcel and where it goes next: tasks, riders, routes, manifests.","SchedulePickup · AssignRider · CreateDeliveryTask · CreateManifest · AddParcelToManifest · CloseManifest"]]
+ .forEach(([id,lab,p,ops],i)=>add(id,"entity",ex[i],190,lab,278,{type:"Entity service",p,ops}));
+[["tracking","Tracking","Records every custody change as an event. Gives status, history and a masked public view. Has its own server (pure autonomy).","RecordScanEvent · RecordSystemEvent · GetCurrentStatus · GetShipmentHistory · GetPublicTrackingView"],
+ ["delivery","Delivery","Keeps the evidence of each attempt: outcome, reason code and proof of delivery.","RecordAttempt · AttachProofOfDelivery · GetAttempts"],
+ ["billing","Billing & Settlement","Fees and payments kept apart from COD. Reconciles COD and pays merchants.","CreateCharge · VoidCharge · RecordCODCollection · ReconcileCOD · CreateSettlement · GetStatement"],
+ ["exception","Exception Case","Every exception or support case linked to a shipment, with reason codes and notes.","OpenCase · AddCaseNote · UpdateCaseStatus · ResolveCase"]]
+ .forEach(([id,lab,p,ops],i)=>add(id,"entity",ex[i],190,lab,346,{type:"Entity service",p,ops}));
+[["identity","Identity & Access","Logs people in, issues signed tokens and checks role permissions.","Authenticate · IssueToken · GetSigningKeys · CheckPermission"],
+ ["notification","Notification","Sends SMS and email on events. Retries failures and never blocks booking or scanning.","SendMessage · GetMessageHistory · RetryFailed · ManageTemplate"],
+ ["location","Location","Validates and geocodes addresses and estimates routes. Hides the map provider.","ValidateAddress · GeocodeAddress · EstimateRoute"],
+ ["payment","Payment Integration","Wraps the gateway and bank. Verifies callbacks and prevents duplicate transactions.","InitiatePayment · VerifyCallback · InitiatePayout · GetTransactionStatus"]]
+ .forEach(([id,lab,p,ops],i)=>add(id,"util",ex[i],190,lab,null,{type:"Utility service",p,ops}));
+[["sms","SMS & email provider",1],["map","Map provider",2],["gateway","Payment gateway & bank",3]]
+ .forEach(([id,lab,i])=>add(id,"ext",ex[i],190,lab,null,{type:"External system",p:"Outside our control. Reached only through a utility service, so changing the provider changes one service."}));
+N.channel={id:"channel",layer:"event",x:862,y:150,w:128,h:360,label:"Event channel",info:{type:"Event channel",p:"Publishers send events here without knowing who listens. Subscribers react on their own. This is how loose coupling works at run time.",ops:"ShipmentBooked · RecipientChanged · ShipmentStatusChanged · SettlementPaid"}};
+
+const svg=document.getElementById("svg"), gNodes=document.getElementById("nodes"), gFx=document.getElementById("fx"), gLab=document.getElementById("layerLabels"), gW=document.getElementById("wires");
+function el(t,a,p){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+Object.entries(L).forEach(([k,l])=>{const t=el("text",{x:20,y:l.y-10,fill:"#7F8AA3","font-size":11,"font-family":"Inter","letter-spacing":"1.4"},gLab);t.textContent=l.label;});
+// faint wires from layers
+el("line",{x1:430,y1:84,x2:430,y2:144,stroke:"#2C3D60","stroke-width":2,"stroke-dasharray":"4 6"},gW);
+el("line",{x1:430,y1:206,x2:430,y2:272,stroke:"#2C3D60","stroke-width":2,"stroke-dasharray":"4 6"},gW);
+el("line",{x1:430,y1:402,x2:430,y2:452,stroke:"#2C3D60","stroke-width":2,"stroke-dasharray":"4 6"},gW);
+["notification","location","payment"].forEach((u,i)=>{const a=N[u],b=N[["sms","map","gateway"][i]];el("line",{x1:a.x+a.w/2,y1:a.y+a.h,x2:b.x+b.w/2,y2:b.y,stroke:"#2C3D60","stroke-width":2},gW);});
+
+const nodeEls={};
+Object.values(N).forEach(n=>{
+  const g=el("g",{class:"node",tabindex:0,role:"button","aria-label":n.label},gNodes);
+  const isExt=n.layer==="ext";
+  el("rect",{class:"box",x:n.x,y:n.y,width:n.w,height:n.h,rx:12,fill:fill[n.layer],stroke:isExt?"#9AA3B5":"#0E1830","stroke-width":isExt?2:1,"stroke-dasharray":isExt?"6 5":"0"},g);
+  if(n.id==="channel"){
+    const t=el("text",{x:n.x+n.w/2,y:n.y+28,"text-anchor":"middle",fill:"#3B2A5C","font-size":15,"font-weight":700,"font-family":"Space Grotesk"},g);t.textContent="Event";
+    const t2=el("text",{x:n.x+n.w/2,y:n.y+46,"text-anchor":"middle",fill:"#3B2A5C","font-size":15,"font-weight":700,"font-family":"Space Grotesk"},g);t2.textContent="channel";
+    ["ShipmentBooked","RecipientChanged","StatusChanged","SettlementPaid"].forEach((e,i)=>{const r=el("rect",{id:"ev_"+i,x:n.x+8,y:n.y+80+i*66,width:n.w-16,height:44,rx:8,fill:"#D9CBEE"},g);const tt=el("text",{x:n.x+n.w/2,y:n.y+107+i*66,"text-anchor":"middle",fill:"#3B2A5C","font-size":11,"font-weight":600,"font-family":"Inter"},g);tt.textContent=e;});
+    const t3=el("text",{x:n.x+n.w/2,y:n.y+n.h-16,"text-anchor":"middle",fill:"#6B5A8C","font-size":10.5,"font-family":"Inter"},g);t3.textContent="publishers don't";
+    const t4=el("text",{x:n.x+n.w/2,y:n.y+n.h-2,"text-anchor":"middle",fill:"#6B5A8C","font-size":10.5,"font-family":"Inter"},g);t4.textContent="know subscribers";
+  } else {
+    const words=n.label.split(" "); const lines=[]; let cur="";
+    const max = n.w<160?16:22;
+    words.forEach(w=>{ if((cur+" "+w).trim().length>max){lines.push(cur.trim());cur=w;} else cur+=" "+w; }); if(cur.trim())lines.push(cur.trim());
+    lines.forEach((ln,i)=>{const t=el("text",{x:n.x+n.w/2,y:n.y+n.h/2+5+(i-(lines.length-1)/2)*16,"text-anchor":"middle",fill:isExt?"#C9CFDB":"#14213D","font-size":n.layer==="client"?13:14.5,"font-weight":600,"font-family":n.layer==="client"||isExt?"Inter":"Space Grotesk"},g);t.textContent=ln;});
+  }
+  g.addEventListener("click",()=>showInfo(n.id));
+  g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showInfo(n.id);}});
+  nodeEls[n.id]=g;
+});
+let selected=null;
+function showInfo(id){
+  const n=N[id]; if(selected)nodeEls[selected].classList.remove("sel"); selected=id; nodeEls[id].classList.add("sel");
+  const i=n.info||{};
+  document.getElementById("info").innerHTML=`<div class="t">${n.label}</div><div class="ty">${i.type||""}</div><p>${i.p||""}</p>${i.ops?`<div class="ops">${i.ops}</div>`:""}`;
+}
+
+// ---------- state ----------
+const S={calls:0,events:0,msgs:0,dup:0,retry:0};
+const P={id:null,status:"NONE",attempts:0,maxAttempts:3,history:[]};
+const MAIN=["BOOKED","PICKED_UP","AT_HUB","OUT_FOR_DELIVERY","DELIVERED","SETTLED"];
+let busy=false, stepMode=false, waiter=null, seq=0;
+const $=id=>document.getElementById(id);
+function speed(){return parseFloat($("speed").value);}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms/speed()));}
+function stat(k,d=1){S[k]+=d; $({calls:"sCalls",events:"sEvents",msgs:"sMsgs",dup:"sDup",retry:"sRetry"}[k]).textContent=S[k];}
+function caption(html){$("caption").innerHTML=html;}
+function gate(){ if(!stepMode) return Promise.resolve(); $("next").disabled=false; return new Promise(r=>{waiter=()=>{$("next").disabled=true;waiter=null;r();};}); }
+$("next").onclick=()=>waiter&&waiter();
+$("bStep").onclick=()=>{stepMode=!stepMode;$("bStep").textContent="Step mode: "+(stepMode?"on":"off");$("bStep").classList.toggle("on",stepMode);if(!stepMode&&waiter)waiter();};
+
+function center(id){const n=N[id];return {x:n.x+n.w/2,y:n.y+n.h/2};}
+function chanPoint(id){const c=center(id);return {x:N.channel.x+N.channel.w/2,y:Math.max(N.channel.y+70,Math.min(N.channel.y+N.channel.h-30,c.y))};}
+function flash(id,cls,ms){const g=nodeEls[id];g.classList.add(cls);setTimeout(()=>g.classList.remove(cls),ms/speed());}
+
+function fly(a,b,label,kind){
+  const col={call:"#4FB3BF",ret:"#9AA3B5",event:"#B79AE0",err:"#F0716A"}[kind];
+  const line=el("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:col,"stroke-width":2.5,"stroke-opacity":.55,"stroke-dasharray":kind==="ret"?"6 6":"0"},gFx);
+  const dot=el("circle",{r:8,fill:col,cx:a.x,cy:a.y,stroke:"#0E1830","stroke-width":2},gFx);
+  let tag=null;
+  if(label){
+    tag=el("g",{},gFx);
+    const mx=(a.x+b.x)/2,my=(a.y+b.y)/2-12;
+    const t=el("text",{x:mx,y:my,"text-anchor":"middle","font-size":12.5,"font-weight":600,fill:"#14213D","font-family":"Inter"},tag); t.textContent=label;
+    const bb=t.getBBox(); const r=el("rect",{x:bb.x-7,y:bb.y-4,width:bb.width+14,height:bb.height+8,rx:7,fill:kind==="err"?"#FFC9C4":kind==="event"?"#ECE3F3":"#F5F3EE",stroke:col,"stroke-width":1.5},tag); tag.insertBefore(r,t);
+  }
+  const dur=900/speed(); const t0=performance.now();
+  return new Promise(res=>{
+    function step(now){const k=Math.min(1,(now-t0)/dur);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;dot.setAttribute("cx",a.x+(b.x-a.x)*e);dot.setAttribute("cy",a.y+(b.y-a.y)*e);
+      if(k<1)requestAnimationFrame(step);else{setTimeout(()=>{line.remove();dot.remove();tag&&tag.remove();},380/speed());res();}}
+    requestAnimationFrame(step);
+  });
+}
+function log(kind,op,ex,pr){
+  const box=$("log"); if(box.querySelector(".empty"))box.innerHTML="";
+  const d=document.createElement("div"); d.className="li "+kind;
+  d.innerHTML=`<span class="n">#${++seq}</span><span class="op">${op}</span><span class="ex">${ex}</span>${pr?`<span class="pr">${pr}</span>`:""}`;
+  box.prepend(d);
+}
+async function call(from,to,op,ex,pr,opts={}){
+  if(!opts.nogate) await gate();
+  log("call",`${N[from].label} → ${N[to].label}: ${op}`,ex,pr); caption(`<b>${N[from].label}</b> calls <b>${N[to].label}</b>.${" "+ex}`);
+  stat("calls"); flash(from,"active",1100); await fly(center(from),center(to),op,"call"); flash(to,"active",900); await sleep(120);
+}
+async function ret(from,to,label,ex){
+  log("ret",`${N[from].label} → ${N[to].label}: reply`,ex||label); await fly(center(from),center(to),label,"ret");
+}
+async function fail(from,to,label,ex,pr,opts={}){
+  if(!opts.nogate) await gate();
+  log("err",`${N[from].label} → ${N[to].label}: ${label}`,ex,pr); caption(`<b style="color:#F0716A">Failure:</b> ${ex}`);
+  flash(to,"err",1300); await fly(center(from),center(to),label,"err"); await sleep(150);
+}
+const evIdx={ShipmentBooked:0,RecipientChanged:1,ShipmentStatusChanged:2,SettlementPaid:3};
+async function event(pub,name,subs,pr){
+  await gate();
+  stat("events"); log("event",`${N[pub].label} publishes ${name}`,`Subscribers: ${subs.map(s=>N[s.to].label).join(", ")}. The publisher does not know who listens.`,pr||"Loose Coupling · events");
+  caption(`<b>${N[pub].label}</b> publishes <b>${name}</b>. It does not wait for, or know about, the subscribers.`);
+  const r=document.getElementById("ev_"+evIdx[name]); r.setAttribute("fill","#B79AE0"); flash(pub,"active",1000);
+  await fly(center(pub),chanPoint(pub),name,"event");
+  const cp=chanPoint(pub);
+  await Promise.all(subs.map(async s=>{
+    if(s.to==="notification"&&$("tNotif").checked){
+      await fly(cp,center("notification"),"undelivered","err"); flash("notification","err",1200);
+      stat("retry"); log("err",`${name} → Notification: service down`,"The message is queued and retried later. Booking and scanning carry on (NFR-12).","Loose Coupling · Resilience");
+      return;
+    }
+    await fly(cp,center(s.to),null,"event"); flash(s.to,"active",900);
+    if(s.ex) log("event",`${N[s.to].label} reacts`,s.ex);
+    if(s.after) await s.after();
+  }));
+  r.setAttribute("fill","#D9CBEE"); await sleep(150);
+}
+async function sms(text){
+  if($("tNotif").checked) return;
+  stat("msgs"); await fly(center("notification"),center("sms"),text,"call"); flash("sms","active",700);
+}
+function note(text,pr){ log("note","Design note",text,pr); caption(text); }
+
+// ---------- parcel state ----------
+function setStatus(st){
+  P.status=st; P.history.push(st);
+  const b=$("badge"); b.textContent=st; b.className="badge"+(["CANCELLED","ATTEMPT_FAILED","RETURNING"].includes(st)?" bad":(["DELIVERED","SETTLED"].includes(st)?" good":""));
+  const tr=$("track"); tr.innerHTML="";
+  const reached=Math.max(...P.history.map(h=>MAIN.indexOf(h)));
+  MAIN.forEach((m,i)=>{const c=document.createElement("span");c.className="chip"+(m===st?" now":(i<=reached?" done":""));c.textContent=m.replace(/_/g," ");tr.appendChild(c);});
+  $("pmeta").textContent=`COD Tk 1,200 · attempts ${P.attempts} of ${P.maxAttempts}`;
+  refresh();
+}
+function newParcel(){
+  P.id="CP2611"+String(Math.floor(Math.random()*9e5)+1e5); P.status="NONE"; P.attempts=0; P.history=[];
+  $("pid").textContent=P.id; $("badge").textContent="NONE"; $("badge").className="badge"; $("track").innerHTML=""; $("pmeta").textContent="COD Tk 1,200 · attempts 0 of 3";
+}
+function refresh(){
+  const st=P.status, newOk=["NONE","DELIVERED","SETTLED","CANCELLED","RETURNING"].includes(st);
+  const en={bAll:true,bP1:newOk,bP2:st==="BOOKED",bP3:st==="PICKED_UP",bP4:st==="OUT_FOR_DELIVERY",bP6:st==="OUT_FOR_DELIVERY",bP5:st==="DELIVERED",bTrack:st!=="NONE",bReset:true};
+  Object.entries(en).forEach(([k,v])=>$(k).disabled=busy||!v);
+  const hint={NONE:"Start with P1",BOOKED:"Next: P2 pickup",PICKED_UP:"Next: P3 hub",AT_HUB:"…",OUT_FOR_DELIVERY:"Next: P4 deliver or P6 fail",DELIVERED:"Next: P5 settle",SETTLED:"Journey complete",CANCELLED:"Booking cancelled. Try P1 again",RETURNING:"Returned to sender. Start a new parcel",ATTEMPT_FAILED:"…"}[st]||"";
+  $("hint").textContent=hint;
+}
+async function run(fn){ if(busy)return; busy=true; refresh(); try{ await fn(); } finally{ busy=false; refresh(); } }
+
+// ---------- scenarios ----------
+async function p1(){
+  if(P.status!=="NONE") newParcel(); if(!P.id) newParcel();
+  await call("sender","book","BookShipment","The sender sends parcel, addresses, a signed quote token and an Idempotency-Key. One request does the whole booking.","Composability · controller");
+  await gate();
+  log("note","Steps 2 and 3 run in parallel","Location and Customer Account do not depend on each other, so Book Shipment calls both at once to keep the booking fast (NFR-2).","Composability");
+  await Promise.all([
+    call("book","location","ValidateAddress","Location checks both addresses through the map provider, which stays hidden.","Standardized Contract · one Address type",{nogate:true}).then(async()=>{await fly(center("location"),center("map"),"geocode","call");flash("map","active",600);await fly(center("map"),center("location"),null,"ret");}),
+    call("book","customer","GetAccount, GetBillingTerms","Returns the sender's contact channel and whether the fee is prepaid or invoiced.","Reusability",{nogate:true})
+  ]);
+  await call("book","pricing","CheckCoverage","Confirms the zone is still served. The quote token is verified; an expired quote would be priced again.","Statelessness · state travels in the token");
+  await call("book","shipment","CreateShipment, GenerateLabel","Creates the shipment and its globally unique tracking ID. A retry with the same key returns the same shipment.","Single owner of the tracking ID");
+  await ret("shipment","book",P.id,"Tracking ID "+P.id+" and the label come back.");
+  if($("tCharge").checked){
+    await fail("book","billing","CreateCharge ✕","Billing could not record the charge, so the booking cannot finish.","Composability · compensation");
+    await call("book","shipment","CancelShipment","Compensation: Book Shipment undoes the shipment it just created. No distributed transaction, no half-finished booking.","Composability · compensation");
+    await ret("book","sender","booking failed","The sender is told the booking failed. Nothing was charged.");
+    setStatus("CANCELLED"); caption("The booking was <b>rolled back</b> with CancelShipment. This is compensation instead of a distributed transaction."); return;
+  }
+  await call("book","billing","CreateCharge","Records the shipping fee, kept separate from the COD amount (FR-11).","Single ownership · separate ledgers");
+  setStatus("BOOKED");
+  await event("book","ShipmentBooked",[
+    {to:"tracking",ex:"Tracking records the BOOKED event and stores the promised delivery date."},
+    {to:"dispatch",ex:"Dispatch & Routing creates a pickup task for a rider."},
+    {to:"notification",ex:"Notification stores the contact details and sends the booking confirmation.",after:()=>sms("Booked ✓")}
+  ]);
+  await ret("book","sender","tracking ID, label, receipt","The sender gets the tracking ID, label and receipt.");
+  caption(`Parcel <b>${P.id}</b> is booked. Five services worked together, and three more reacted to one event.`);
+}
+async function p2(){
+  await call("rider","tracking","RecordScanEvent: PICKED_UP","The rider scans the parcel. Tracking stores an immutable event with time, place and actor. The event ID is created on the phone.","Statelessness · idempotent");
+  setStatus("PICKED_UP");
+  if($("tDup").checked){
+    await gate();
+    log("note","Weak signal: the app resends","The rider's phone did not get the reply, so it sends the same scan again with the same event ID.","Statelessness");
+    await call("rider","tracking","RecordScanEvent (again)","Same event ID as before.","Standardized Contract · Idempotency-Key",{nogate:true});
+    stat("dup"); await ret("tracking","rider","200 OK: already recorded","Tracking sees the event ID is already stored. It returns the original result and creates no duplicate event (NFR-4).");
+  }
+  await event("tracking","ShipmentStatusChanged",[
+    {to:"dispatch",ex:"Dispatch & Routing closes the pickup task."},
+    {to:"notification",ex:"Notification tells the sender the parcel was picked up.",after:()=>sms("Picked up")}
+  ],"Event-driven composition · no controller");
+  caption("P2 has <b>no task service</b>. One scan and one event are enough, so a controller would only add a network call.");
+}
+async function p3(){
+  await call("hub","tracking","RecordScanEvent: HUB_ARRIVAL","The hub operator scans the parcel on arrival.","Reusability · same capability as P2");
+  setStatus("AT_HUB");
+  await call("hub","dispatch","AddParcelToManifest, CloseManifest","The parcel is put on the manifest for its outgoing route.","Single ownership · Dispatch owns manifests");
+  await event("tracking","ShipmentStatusChanged",[{to:"dispatch",ex:"The parcel reached the delivery station, so Dispatch creates a delivery task and assigns a rider."},{to:"notification",ex:"No message needed for this step."}]);
+  await call("rider","tracking","RecordScanEvent: OUT_FOR_DELIVERY","The rider scans the parcel out for delivery.","Event visibility within 30 s (NFR-5)");
+  setStatus("OUT_FOR_DELIVERY");
+  await event("tracking","ShipmentStatusChanged",[{to:"notification",ex:"The recipient is told the parcel is on the way and that COD Tk 1,200 is due.",after:()=>sms("Out for delivery · COD Tk 1,200")}]);
+}
+async function p4(){
+  await call("rider","complete","RecordDelivery","One call from the rider app carries the outcome, proof of delivery and COD collected. A normal delivery takes at most 4 actions (NFR-9).","Composability · coarse operation");
+  await call("complete","shipment","GetShipment","Reads the expected COD amount, which only Shipment owns.","Autonomy · one owner per fact");
+  await call("complete","delivery","RecordAttempt, AttachProofOfDelivery","Stores the signature or photo as evidence for any later dispute.","Single ownership · evidence kept apart");
+  await call("complete","billing","RecordCODCollection","Records the Tk 1,200 COD collected and checks it against the expected amount.","Separate fee and COD ledgers");
+  await call("complete","tracking","RecordScanEvent: DELIVERED","Tracking records the final custody event.","Reusability");
+  setStatus("DELIVERED");
+  await event("tracking","ShipmentStatusChanged",[{to:"dispatch",ex:"Dispatch closes the delivery task."},{to:"notification",ex:"Sender and recipient are told it was delivered.",after:()=>sms("Delivered ✓")}]);
+  await ret("complete","rider","done","The rider app gets one reply and moves to the next parcel.");
+}
+async function p6(){
+  P.attempts++; $("pmeta").textContent=`COD Tk 1,200 · attempts ${P.attempts} of ${P.maxAttempts}`;
+  await call("rider","complete","RecordFailedAttempt","Nobody was home. The rider sends one call with the reason code NO_RECIPIENT.","Standardized Contract · shared reason codes");
+  await call("complete","delivery","RecordAttempt","The failed attempt is stored as evidence.","");
+  await call("complete","tracking","RecordScanEvent: ATTEMPT_FAILED","Tracking records the failed attempt.","");
+  setStatus("ATTEMPT_FAILED");
+  await call("complete","handle","ScheduleReattempt","Complete Delivery passes the problem to Handle Exception, a sub-controller. This is a nested composition.","Composability · sub-controller");
+  await call("handle","delivery","GetAttempts",`Attempts so far: ${P.attempts}.`,"");
+  await call("handle","pricing","GetServicePolicy","The rule says: at most 3 attempts, then return to sender. The rule is data, so changing it needs no code change.","Autonomy · rules as data");
+  await call("handle","exception",P.attempts===1?"OpenCase":"UpdateCaseStatus","The case and its reason code are stored in Exception Case.","Statelessness · state deferred");
+  if(P.attempts<P.maxAttempts){
+    await call("handle","dispatch","CreateDeliveryTask (tomorrow)","A reattempt task is created for the next day.","Statelessness · state deferred");
+    note("Handle Exception now <b>finishes and forgets</b>. The case lives in Exception Case and the next task in Dispatch. Tomorrow's scan starts it again.","Statelessness");
+    await sleep(500); setStatus("OUT_FOR_DELIVERY");
+    caption(`Reattempt ${P.attempts+1} is scheduled. Try <b>P4</b> to deliver, or <b>P6</b> to fail again. After ${P.maxAttempts} failures the parcel goes back to the sender.`);
+  } else {
+    await call("handle","dispatch","InitiateReturn","Third failure: the policy says return to sender. A return task is created.","Rules from policy");
+    await call("handle","billing","CreateCharge (return fee)","The return charge from the service policy is added.","");
+    await call("handle","tracking","RecordSystemEvent: RETURNING","One general operation records non-scan events such as returns.","Reusability · general operation");
+    setStatus("RETURNING");
+    await event("tracking","ShipmentStatusChanged",[{to:"dispatch",ex:"Dispatch closes the delivery task."},{to:"notification",ex:"The sender is told the parcel is coming back.",after:()=>sms("Returning to sender")}]);
+  }
+}
+async function p5(){
+  await call("staff","billing","ReconcileCOD, CreateSettlement","The finance manager reconciles COD and creates the merchant settlement. Fees and COD are netted in one transaction, so nobody is paid twice.","Cohesion · kept together");
+  await call("billing","customer","GetBillingTerms","Reads the merchant's payout account.","Reusability");
+  await call("billing","payment","InitiatePayout","Billing never talks to the bank directly. Payment Integration does.","Loose Coupling · wrapper");
+  if($("tGw").checked){
+    await fail("payment","gateway","timeout ✕","The gateway did not answer in time.","Resilience (NFR-11)");
+    stat("retry"); await call("payment","gateway","retry, same Idempotency-Key","Payment Integration retries with the same key, so the bank will not pay twice even if the first request did arrive.","Idempotent retry");
+  } else {
+    await fly(center("payment"),center("gateway"),"payout","call"); flash("gateway","active",700); stat("calls");
+  }
+  await ret("gateway","payment","paid","The bank confirms. Payment Integration converts the reply into our own canonical types.");
+  await ret("payment","billing","paid","Billing marks the settlement as paid.");
+  setStatus("SETTLED");
+  await event("billing","SettlementPaid",[{to:"notification",ex:"The merchant is told the payout was made.",after:()=>sms("Payout made ✓")}]);
+  caption("Journey complete: <b>booked → picked up → at hub → delivered → settled</b>. Press P1 to book a new parcel.");
+}
+async function trackView(){
+  await call("public","tracking","GetPublicTrackingView","Anyone with the tracking ID can look. The call is open but rate-limited.","Abstraction · open access level");
+  await ret("tracking","public","masked view","Returns status and history with the full address and phone number hidden (NFR-7).");
+  note(`What the public sees for ${P.id}: <b>${P.status.replace(/_/g," ")}</b> · Dhaka zone · recipient “R*** K***” · phone “+880 1*** ***45”. Staff use GetShipmentHistory to see everything.`,"Abstraction · functional");
+}
+async function journey(){
+  newParcel(); await p1(); if(P.status!=="BOOKED") return;
+  await sleep(500); await p2(); await sleep(500); await p3(); await sleep(500); await p4(); await sleep(500); await p5();
+}
+$("bAll").onclick=()=>run(journey);
+$("bP1").onclick=()=>run(p1);
+$("bP2").onclick=()=>run(p2);
+$("bP3").onclick=()=>run(p3);
+$("bP4").onclick=()=>run(p4);
+$("bP6").onclick=()=>run(p6);
+$("bP5").onclick=()=>run(p5);
+$("bTrack").onclick=()=>run(trackView);
+$("bReset").onclick=()=>{ if(busy)return; newParcel(); P.id=null; $("pid").textContent="no parcel yet"; Object.keys(S).forEach(k=>{S[k]=0;}); ["sCalls","sEvents","sMsgs","sDup","sRetry"].forEach(i=>$(i).textContent="0"); seq=0; $("log").innerHTML='<div class="empty">Steps will appear here with a plain explanation and the SOA principle behind them.</div>'; caption("Ready. Press <b>Run full journey</b> or start with <b>P1</b>."); refresh(); };
+$("tNotif").onchange=()=>{nodeEls.notification.classList.toggle("down",$("tNotif").checked); caption($("tNotif").checked?"Notification is <b>down</b>. Run P1 or P2: booking and scanning still work, and messages are queued (NFR-12).":"Notification is back up.");};
+refresh(); showInfo("channel");
+})();
+</script>
+</body>
+</html>
